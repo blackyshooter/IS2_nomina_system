@@ -1,0 +1,12 @@
+{
+    "name": "eliassoto/is2_nomina",
+    "description": "IS2 Dreamteam",
+    "authors": [
+        {
+            "name": "Elias",
+            "email": "blackyshooter300@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
