@@ -1,49 +1,51 @@
-version '3.8'
+version: '3.8'
 
-services
-  app
-    build 
-      context .
-      dockerfile Dockerfile
-    container_name laravel_app
-    volumes
-      - .varwwwhtml
-    ports
-      - 808080
-    depends_on
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
       - db
-    networks
+    networks:
+      - laravel_network
+    environment:
+      - PHP_MEMORY_LIMIT=256M
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: laravel_user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: laravel_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
       - laravel_network
 
-  db
-    image postgreslatest
-    container_name postgres_db
-    environment
-      POSTGRES_USER laravel_user
-      POSTGRES_PASSWORD secret
-      POSTGRES_DB laravel_db
-    volumes
-      - postgres_datavarlibpostgresqldata
-    ports
-      - 54325432
-    networks
-      - laravel_network
-
-  pgadmin
-    image dpagepgadmin4latest
-    container_name pgadmin
-    environment
-      PGADMIN_DEFAULT_EMAIL admin@example.com
-      PGADMIN_DEFAULT_PASSWORD admin
-    ports
-      - 505080
-    depends_on
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
       - db
-    networks
+    networks:
       - laravel_network
 
-networks
-  laravel_network
+networks:
+  laravel_network:
 
-volumes
-  postgres_data
+volumes:
+  postgres_data:
