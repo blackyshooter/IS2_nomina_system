@@ -1,1 +1,0 @@
-# IS2_nomina_system
