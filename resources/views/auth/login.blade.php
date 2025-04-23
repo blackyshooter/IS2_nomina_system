@@ -9,21 +9,11 @@
     @endif
 
     <form method="POST" action="{{ route('login') }}">
-        @csrf
+    @csrf
+    <input type="text" name="login" placeholder="Correo o ID de usuario" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <button type="submit">Ingresar</button>
+</form>
 
-        <div class="form-group mb-3">
-            <label for="email">Correo electrónico</label>
-            <input type="email" name="email" class="form-control" required autofocus>
-        </div>
-
-        <div class="form-group mb-3">
-            <label for="contraseña">Contraseña</label>
-            <input type="password" name="contraseña" class="form-control" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Acceder</button>
-
-        <a href="{{ route('register') }}" class="btn btn-link">¿No tienes cuenta? Regístrate</a>
-    </form>
 </div>
 @endsection

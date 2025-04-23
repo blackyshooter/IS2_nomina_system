@@ -21,4 +21,9 @@ class Empleado extends Model
     {
         return $this->belongsTo(Persona::class, 'cedula', 'cedula');
     }
+    public function usuario()
+    {
+        return $this->hasOne(Usuario::class, 'id_empleado', 'id_empleado');
+    }
+
 }

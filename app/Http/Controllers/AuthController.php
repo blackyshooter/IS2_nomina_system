@@ -3,70 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Usuario;
 
 class AuthController extends Controller
 {
-    public function showLogin()
+    public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
-
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'contraseña' => 'required'
-        ]);
+{
+    $request->validate([
+        'login' => 'required|string',
+        'password' => 'required|string',
+    ]);
 
-        $user = Usuario::where('email', $request->email)->first();
+    $usuario = Usuario::where('email', $request->login)
+                      ->orWhere('id_usuario', $request->login)
+                      ->first();
 
-        if ($user && Hash::check($request->contraseña, $user->contraseña)) {
-            Auth::login($user);
-            return redirect()->route('empleados.index');
+    if ($usuario && Hash::check($request->password, $usuario->password)) {
+        Auth::login($usuario);
+
+        // 🔁 Redirección según el rol
+        switch ($usuario->rol) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'empleado':
+                return redirect()->route('empleado.inicio');
+            default:
+                return redirect()->route('home');
         }
-
-        return back()->with('error', 'Credenciales incorrectas');
     }
 
-     
-    public function register(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|unique:usuario,email',
-            'cedula' => 'required|numeric|unique:personas,cedula',
-            'nombre' => 'required',
-            'apellido' => 'required',
-            'contraseña' => 'required|min:6'
-        ]);
+    return back()->with('error', 'Credenciales incorrectas');
+}
 
-        // Crear persona
-        \App\Models\Persona::create([
-            'cedula' => $request->cedula,
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'fecha_nacimiento' => now() // temporal
-        ]);
-
-        // Crear usuario
-        Usuario::create([
-            'email' => $request->email,
-            'nombre_usuario' => $request->nombre,
-            'contraseña' => Hash::make($request->contraseña),
-            'id_empleado' => null
-        ]);
-
-        return redirect()->route('login')->with('success', 'Cuenta creada correctamente. Inicia sesión.');
-    }
-
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
         return redirect()->route('login');

@@ -4,35 +4,35 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     public function run()
     {
-        $admin = User::create([
+        $admin = Usuario::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('admin123'),
         ]);
         $admin->assignRole('Administrador');
 
-        $gerente = User::create([
+        $gerente = Usuario::create([
             'name' => 'Gerente',
             'email' => 'gerente@example.com',
             'password' => Hash::make('gerente123'),
         ]);
         $gerente->assignRole('Gerente');
 
-        $asistente = User::create([
+        $asistente = Usuario::create([
             'name' => 'Asistente',
             'email' => 'asistente@example.com',
             'password' => Hash::make('asistente123'),
         ]);
         $asistente->assignRole('Asistente');
 
-        $empleado = User::create([
+        $empleado = Usuario::create([
             'name' => 'Empleado',
             'email' => 'empleado@example.com',
             'password' => Hash::make('empleado123'),

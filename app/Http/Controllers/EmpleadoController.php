@@ -18,6 +18,8 @@ class EmpleadoController extends Controller
     {
         return view('empleados.create');
     }
+    
+
 
     public function store(Request $request)
     {
@@ -100,6 +102,49 @@ class EmpleadoController extends Controller
         $empleado->delete(); // borra empleado
 
         return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente.');
+    }
+
+    public function asignarRolForm($id)
+{
+    $empleado = Empleado::findOrFail($id);
+    $usuario = Usuario::where('id_empleado', $empleado->id_empleado)->first();
+
+    if (!$usuario) {
+        return redirect()->back()->with('error', 'Este empleado aún no tiene un usuario asignado.');
+    }
+
+    $roles = Role::all();
+
+    return view('empleados.asignar-rol', compact('empleado', 'usuario', 'roles'));
+}
+
+public function asignarRolStore(Request $request, $id)
+{
+    $request->validate([
+        'rol_id' => 'required|exists:roles,id',
+    ]);
+
+    $empleado = Empleado::findOrFail($id);
+    $usuario = Usuario::where('id_empleado', $empleado->id_empleado)->first();
+
+    if (!$usuario) {
+        return redirect()->back()->with('error', 'Este empleado no tiene un usuario asignado.');
+    }
+
+    // Eliminar roles actuales y asignar el nuevo
+    DB::table('usuarios_roles')->where('id_usuario', $usuario->id_usuario)->delete();
+
+    DB::table('usuarios_roles')->insert([
+        'id_usuario' => $usuario->id_usuario,
+        'id_rol' => $request->rol_id,
+    ]);
+
+    return redirect()->route('empleados.index')->with('success', 'Rol asignado correctamente.');
+}
+
+public function __construct()
+    {
+        $this->middleware(['role:Administrador|Gerente'])->only(['asignarRolForm', 'asignarRolStore']);
     }
 }
 

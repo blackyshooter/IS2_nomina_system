@@ -12,21 +12,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('usuario', function (Blueprint $table) {
-            $table->bigIncrements('id_usuario'); // autoincremental
-    
-            $table->string('email', 100)->unique();
-            $table->string('contraseña', 255);
-            $table->string('nombre_usuario', 50);
-    
-            $table->unsignedBigInteger('id_empleado')->nullable();
-    
-            $table->foreign('id_empleado')
-                  ->references('id_empleado')
-                  ->on('empleados')
-                  ->onDelete('set null');
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('id_usuario')->nullable()->unique(); // para login alternativo
+            $table->string('rol')->default('empleado');          // para redirección por rol
+            $table->unsignedBigInteger('empleado_id')->nullable(); // para asociar al empleado
+            $table->boolean('debe_cambiar_password')->default(true); // opcional
+            $table->timestamps();
         });
+        
     }
-    
 
     /**
      * Reverse the migrations.

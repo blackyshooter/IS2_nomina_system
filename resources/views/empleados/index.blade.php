@@ -5,6 +5,11 @@
     <h2>Lista de Empleados</h2>
 
     <a href="{{ route('empleados.create') }}" class="btn btn-primary mb-3">Nuevo Empleado</a>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -38,6 +43,12 @@
                     </form>
                 </td>
             </tr>
+            @if($empleado->usuario) {{-- Asegurate de tener relación con Usuario --}}
+                <a href="{{ route('empleados.asignarRolForm', $empleado->id_empleado) }}" class="btn btn-sm btn-warning">Asignar Rol</a>
+            @else
+                <span class="text-muted">Sin usuario</span>
+            @endif
+
             @endforeach
         </tbody>
     </table>
