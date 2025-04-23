@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'usuario',
+            'provider' => 'users',
         ],
     ],
 
@@ -91,7 +91,7 @@ return [
     */
 
     'passwords' => [
-        'usuario' => [
+        'users' => [
             'provider' => 'usuario',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
