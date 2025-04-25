@@ -24,10 +24,14 @@ class Usuario extends Authenticatable
         'password', 'remember_token',
     ];
     
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol');
+    }
     // Usado por Laravel para saber qué campo es el "usuario" para login
     public function getAuthIdentifierName()
     {
-        return 'correo';
+        return 'email';
     }
     
     public $timestamps = false;
@@ -37,9 +41,6 @@ class Usuario extends Authenticatable
         return $this->contraseña;
     }
 
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'id_rol');
-    }
+    
 
 }

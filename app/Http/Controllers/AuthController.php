@@ -33,14 +33,15 @@ class AuthController extends Controller
     dd(Auth::check(), Auth::user(), session()->all());*/
 
         // Redirección según el rol
-        switch ($usuario->id_rol) {
-            case '1':
-                return redirect()->route('admin'); 
-            case '2':
+        switch (optional($usuario->rol)->nombre) {
+            case 'Administrador':
                 return redirect()->route('admin');
+            case 'Gerente/RRHH':
+                return redirect()->route('empleados.index');
             default:
-                return redirect()->route('admin');
+                return redirect()->route('empleado.inicio');
         }
+        
     }
 
     return back()->with('error', 'Credenciales incorrectas');

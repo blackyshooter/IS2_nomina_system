@@ -10,10 +10,11 @@ class SoloAdministrador
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->rol == 'Administrador') {
+        if (Auth::check() && optional(Auth::user()->rol)->nombre_rol === 'Administrador') {
             return $next($request);
         }
 
         return redirect()->route('login')->with('error', 'Acceso no autorizado.');
     }
 }
+
