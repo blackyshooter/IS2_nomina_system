@@ -27,15 +27,19 @@ class AuthController extends Controller
 
     if ($usuario && Hash::check($request->password, $usuario->password)) {
         Auth::login($usuario);
+        
+        // Verificación antes del redirect
+   /* session()->put('login_test', 'OK');
+    dd(Auth::check(), Auth::user(), session()->all());*/
 
-        // 🔁 Redirección según el rol
-        switch ($usuario->rol) {
-            case 'admin':
-                return redirect()->route('admin.dashboard');
-            case 'empleado':
-                return redirect()->route('empleado.inicio');
+        // Redirección según el rol
+        switch ($usuario->id_rol) {
+            case '1':
+                return redirect()->route('admin'); 
+            case '2':
+                return redirect()->route('admin');
             default:
-                return redirect()->route('home');
+                return redirect()->route('admin');
         }
     }
 

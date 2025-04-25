@@ -8,6 +8,10 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
+    @error('correo')
+        <div style="color: red;">{{ $message }}</div>
+    @enderror
+    
     <form method="POST" action="{{ route('login') }}">
     @csrf
     <input type="text" name="login" placeholder="Correo o ID de usuario" required>

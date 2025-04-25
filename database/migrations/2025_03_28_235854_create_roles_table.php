@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::table('roles', function (Blueprint $table) {
-        // Agrega o modifica columnas si es necesario
-        $table->string('nuevo_campo')->nullable();
+    Schema::create('roles', function (Blueprint $table) {
+        $table->bigIncrements('id_rol'); // PK
+        $table->string('nombre_rol', 25)->unique();
+        $table->string('descripcion', 100)->nullable();
+        $table->timestamps();
     });
 }
 

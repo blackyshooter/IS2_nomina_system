@@ -1,4 +1,4 @@
-<?php
+<?
 
 namespace App\Http\Controllers;
 
@@ -10,6 +10,7 @@ class EmpleadoController extends Controller
 {
     public function index()
     {
+        dd(Auth::check(), Auth::user());
         $empleados = Empleado::with('persona')->get();
         return view('empleados.index', compact('empleados'));
     }
@@ -143,8 +144,9 @@ public function asignarRolStore(Request $request, $id)
 }
 
 public function __construct()
-    {
-        $this->middleware(['role:Administrador|Gerente'])->only(['asignarRolForm', 'asignarRolStore']);
-    }
+{
+    $this->middleware('auth');
+}
+
 }
 
