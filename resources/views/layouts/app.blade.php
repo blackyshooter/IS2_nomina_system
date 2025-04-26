@@ -32,5 +32,45 @@
                 {{ $slot }}
             </main>
         </div>
+        <script>
+            let timeout;
+
+            // Detectar actividad del usuario
+            function resetTimeout() {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    // Si no hay actividad, no se envía el ping
+                    console.log('Usuario inactivo. No se enviará ping.');
+                }, {{ config('session.lifetime') * 60 * 1000 }}); // Tiempo de inactividad permitido
+            }
+
+            // Enviar un ping al servidor para mantener la sesión activa
+            function sendPing() {
+                fetch('{{ route('session.ping') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Sesión mantenida activa.');
+                    }
+                }).catch(error => {
+                    console.error('Error al enviar el ping:', error);
+                });
+            }
+
+            // Escuchar eventos de actividad del usuario
+            ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
+                window.addEventListener(event, () => {
+                    resetTimeout();
+                    sendPing();
+                });
+            });
+
+            // Inicializar el timeout
+            resetTimeout();
+        </script>
     </body>
 </html>

@@ -32,9 +32,9 @@ return [
     |
     */
 
-    'lifetime' => (int) env('SESSION_LIFETIME', 120),
+    'lifetime' => (int) env('SESSION_LIFETIME', 30),
 
-    'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
+    'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -215,3 +215,15 @@ return [
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
 
 ];
+
+?>
+
+<script>
+    // Notificar al usuario 5 minutos antes de que la sesión expire
+    const sessionLifetime = {{ config('session.lifetime') }} * 60 * 1000; // Convertir a milisegundos
+    const warningTime = sessionLifetime - (5 * 60 * 1000); // 5 minutos antes
+
+    setTimeout(() => {
+        alert('Tu sesión está a punto de expirar. Por favor, guarda tu trabajo.');
+    }, warningTime);
+</script>
