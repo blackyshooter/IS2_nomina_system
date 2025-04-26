@@ -21,4 +21,10 @@ class Empleado extends Model
     {
         return $this->belongsTo(Persona::class, 'cedula', 'cedula');
     }
+
+    public function hijos()
+    {
+        return $this->hasMany(Hijo::class, 'id_empleado');
+    }
+
 }

@@ -7,25 +7,22 @@
     <title>Bienvenido</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Función para alternar entre modo claro y oscuro
+        // Script para alternar entre modo claro y oscuro
         function toggleDarkMode() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
-                html.classList.remove('dark'); // Cambiar a modo claro
-                localStorage.setItem('theme', 'light'); // Guardar el tema claro en localStorage
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
             } else {
-                html.classList.add('dark'); // Cambiar a modo oscuro
-                localStorage.setItem('theme', 'dark'); // Guardar el tema oscuro en localStorage
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
             }
         }
 
-        // Configuración inicial del tema al cargar la página
+        // Configuración inicial del tema
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme'); // Obtener el tema guardado en localStorage
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark'); // Aplicar el tema oscuro
-            } else {
-                document.documentElement.classList.remove('dark'); // Aplicar el tema claro
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
             }
         });
     </script>
@@ -69,7 +66,7 @@
 
         <!-- Footer -->
         <footer class="mt-8 text-center text-gray-500 dark:text-gray-400 text-sm">
-            © {{ date('Y') }} Mi Sistema. Todos los derechos reservados.
+            © {{ date('Y') }} Todos los derechos reservados.
         </footer>
     </div>
 </body>

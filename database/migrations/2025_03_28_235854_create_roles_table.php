@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('roles', function (Blueprint $table) {
-        $table->bigIncrements('id_rol');
-        $table->string('nombre_rol', 25);
-        $table->string('descripcion', 25);
-        $table->unsignedBigInteger('id_usuario');
+    if (!Schema::hasTable('roles')) {
+        Schema::create('roles', function (Blueprint $table) {
+            $table->bigIncrements('id_rol');
+            $table->string('nombre_rol', 25);
+            $table->string('descripcion', 25);
+            $table->unsignedBigInteger('id_usuario');
 
-        $table->foreign('id_usuario')->references('id_usuario')->on('usuario')->onDelete('cascade');
-    });
+            $table->foreign('id_usuario')->references('id_usuario')->on('usuario')->onDelete('cascade');
+        });
+    }
 }
 
 
