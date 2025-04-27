@@ -20,7 +20,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('empleados', EmpleadoController::class);
+
+    // Rutas manuales para empleados
+    Route::get('/empleados', [EmpleadoController::class, 'index'])->name('empleados.index');
+    Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
+    Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
+    Route::get('/empleados/{id}/edit', [EmpleadoController::class, 'edit'])->name('empleados.edit');
+    Route::put('/empleados/{id}', [EmpleadoController::class, 'update'])->name('empleados.update');
+    Route::delete('/empleados/{id}', [EmpleadoController::class, 'destroy'])->name('empleados.destroy');
+
     Route::resource('liquidaciones', LiquidacionController::class);
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
 });
