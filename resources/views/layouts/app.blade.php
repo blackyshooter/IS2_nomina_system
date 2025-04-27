@@ -1,32 +1,76 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Nómina</title>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- Bootstrap CDN --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    {{-- Navbar --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">Nómina</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('empleados.index') }}">Empleados</a></li>
-                </ul>
-            </div>
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+            @include('layouts.navigation')
+
+            <!-- Page Heading -->
+            @isset($header)
+                <header class="bg-white dark:bg-gray-800 shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
+
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
         </div>
-    </nav>
+        <script>
+            let timeout;
 
-    {{-- Contenido principal --}}
-    <main class="container">
-        @yield('content')
-    </main>
+            // Detectar actividad del usuario
+            function resetTimeout() {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    // Si no hay actividad, no se envía el ping
+                    console.log('Usuario inactivo. No se enviará ping.');
+                }, {{ config('session.lifetime') * 60 * 1000 }}); // Tiempo de inactividad permitido
+            }
 
-    {{-- Bootstrap JS (opcional) --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+            // Enviar un ping al servidor para mantener la sesión activa
+            function sendPing() {
+                fetch('{{ route('session.ping') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Sesión mantenida activa.');
+                    }
+                }).catch(error => {
+                    console.error('Error al enviar el ping:', error);
+                });
+            }
+
+            // Escuchar eventos de actividad del usuario
+            ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
+                window.addEventListener(event, () => {
+                    resetTimeout();
+                    sendPing();
+                });
+            });
+
+            // Inicializar el timeout
+            resetTimeout();
+        </script>
+    </body>
 </html>
