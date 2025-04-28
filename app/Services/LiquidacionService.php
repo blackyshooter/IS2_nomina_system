@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\Empleado;
 use App\Models\Parametro;
-use App\Models\Concepto;
-use App\Models\Liquidacion;
 
 class LiquidacionService
 {
@@ -25,7 +23,9 @@ class LiquidacionService
         ];
 
         // Concepto: Bonificación por hijo menor a 18 años
-        $hijos = $empleado->hijos()->whereRaw('TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) < 18')->count();
+        $hijos = $empleado->hijos()
+            ->whereRaw("EXTRACT(YEAR FROM AGE(NOW(), fecha_nacimiento)) < 18")
+            ->count();
 
         if ($sueldoBase < ($salarioMinimo * 3) && $hijos > 0) {
             $bonificacion = 0.05 * $salarioMinimo * $hijos;

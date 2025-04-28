@@ -29,8 +29,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/empleados/{id}', [EmpleadoController::class, 'update'])->name('empleados.update');
     Route::delete('/empleados/{id}', [EmpleadoController::class, 'destroy'])->name('empleados.destroy');
 
-    Route::resource('liquidaciones', LiquidacionController::class);
-    Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
+    // Liquidaciones
+    Route::get('/liquidaciones', [LiquidacionController::class, 'index'])->name('liquidaciones.index');
+    Route::post('/liquidaciones/calcular', [LiquidacionController::class, 'calcular'])->name('liquidaciones.calcular');
+
+    // Reportes
+    Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+    Route::get('/reportes/empleados', [ReporteController::class, 'empleados'])->name('reportes.empleados');
+    Route::get('/reportes/liquidaciones', [ReporteController::class, 'liquidaciones'])->name('reportes.liquidaciones');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
