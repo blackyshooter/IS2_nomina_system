@@ -20,16 +20,17 @@ class UsuarioController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'correo' => 'required|email|unique:usuario,correo',
-            'password' => 'required|string|min:6|confirmed',
+        $validated = $request->validate([
+            'nombre_usuario' => 'required|string|max:255',
+            'email' => 'required|email|unique:usuario,email',
+            'contraseña' => 'required|string|min:6|confirmed',
         ]);
 
         Usuario::create([
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
-            'password' => bcrypt($request->password),
+            'nombre_usuario' => $validated['nombre_usuario'],
+            'email' => $validated['email'],
+            'contraseña' => bcrypt($validated['contraseña']),
+            'id_empleado' => null, // O ajustar según necesidad
         ]);
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
@@ -43,21 +44,21 @@ class UsuarioController extends Controller
     public function update(Request $request, Usuario $usuario)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'correo' => 'required|email|unique:usuario,correo,' . $usuario->id,
+            'nombre_usuario' => 'required|string|max:255',
+            'email' => 'required|email|unique:usuario,email,' . $usuario->id_usuario,
         ]);
 
         $usuario->update([
-            'nombre' => $request->nombre,
-            'correo' => $request->correo,
+            'nombre_usuario' => $request->nombre_usuario,
+            'email' => $request->email,
         ]);
 
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado.');
+        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
     public function destroy(Usuario $usuario)
     {
         $usuario->delete();
-        return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado.');
+        return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }
 }

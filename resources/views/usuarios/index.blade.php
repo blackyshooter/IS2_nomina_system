@@ -7,7 +7,7 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <a href="{{ route('usuarios.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded">Crear Usuario</a>
+            <a href="{{ route('usuarios.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded mb-4 inline-block">Crear Usuario</a>
 
             <div class="mt-6 bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg p-6">
                 @if (session('success'))
@@ -16,27 +16,27 @@
                     </div>
                 @endif
 
-                <table class="table-auto w-full">
-                    <thead>
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
-                            <th class="px-4 py-2">ID</th>
-                            <th class="px-4 py-2">Nombre</th>
-                            <th class="px-4 py-2">Correo</th>
-                            <th class="px-4 py-2">Acciones</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre de Usuario</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="bg-white dark:bg-gray-800">
                         @foreach ($usuarios as $usuario)
                             <tr class="border-t">
-                                <td class="px-4 py-2">{{ $usuario->id }}</td>
-                                <td class="px-4 py-2">{{ $usuario->nombre }}</td>
-                                <td class="px-4 py-2">{{ $usuario->correo }}</td>
-                                <td class="px-4 py-2">
-                                    <a href="{{ route('usuarios.edit', $usuario) }}" class="text-blue-500">Editar</a> |
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{{ $usuario->id_usuario }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{{ $usuario->nombre_usuario }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{{ $usuario->email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('usuarios.edit', $usuario) }}" class="text-blue-500 hover:text-blue-700">Editar</a> |
                                     <form action="{{ route('usuarios.destroy', $usuario) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-500">Eliminar</button>
+                                        <button type="submit" class="text-red-500 hover:text-red-700">Eliminar</button>
                                     </form>
                                 </td>
                             </tr>
