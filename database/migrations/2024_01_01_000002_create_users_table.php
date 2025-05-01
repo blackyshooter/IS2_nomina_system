@@ -12,14 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->string('id_usuario', 25)->primary(); // en lugar de id auto-incremental
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('nombre_usuario', 50);
+            $table->unsignedBigInteger('id_empleado');
+            $table->unsignedBigInteger('id_rol');
+        
+            $table->foreign('id_empleado')->references('id_empleado')->on('empleados')->onDelete('cascade');
+            $table->foreign('id_rol')->references('id_rol')->on('roles')->onDelete('restrict');
+        
             $table->timestamps();
         });
+        
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

@@ -17,10 +17,10 @@ return new class extends Migration
         $table->string('telefono', 25);
         $table->float('sueldo_base');
         $table->date('fecha_ingreso');
+        $table->date('fecha_salida');
         $table->string('cargo', 25);
         $table->timestamps();
 
-        $table->foreign('cedula')->references('cedula')->on('personas')->onDelete('cascade');
     });
 }
 
