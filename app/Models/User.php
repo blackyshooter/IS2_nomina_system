@@ -14,12 +14,12 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $table = 'users';
-    protected $primaryKey = 'id'; // string
+    protected $primaryKey = 'id_usuario'; // string
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id', 'email', 'password', 'nombre_usuario', 'id_empleado', 'id_rol'
+        'id_usuario', 'email', 'password', 'nombre_usuario', 'id_empleado', 'id_rol'
     ];
 
     protected $hidden = [

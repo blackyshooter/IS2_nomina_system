@@ -33,9 +33,15 @@ Route::middleware('auth')->group(function () {
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', function () {
+        return view('admin.dashboard');
+    })->name('admin');
+
+    // Futuras rutas protegidas: crear empleados, asignar usuarios, etc.
 });
+
 
 Route::post('/session/ping', function () {
     return response()->json(['status' => 'active']);

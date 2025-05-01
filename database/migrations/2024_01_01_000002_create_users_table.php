@@ -20,8 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_rol');
         
             $table->foreign('id_empleado')->references('id_empleado')->on('empleados')->onDelete('cascade');
-            $table->foreign('id_rol')->references('id_rol')->on('roles')->onDelete('restrict');
-        
+            $table->foreign('id_rol')->references('id_rol')->on('roles')->onDelete('restrict');        
             $table->timestamps();
         });
         

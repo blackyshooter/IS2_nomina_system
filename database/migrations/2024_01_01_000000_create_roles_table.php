@@ -14,7 +14,6 @@ return new class extends Migration
             $table->bigIncrements('id_rol');
             $table->string('nombre_rol', 25)->unique();
             $table->string('descripcion', 100)->nullable();
-            $table->string('id_usuario', 25); // se agregará la foreign key luego
             $table->timestamps();
         });
     }
