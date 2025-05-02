@@ -1,8 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard - Sistema de Nómina') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Dashboard - Sistema de Nómina') }}
+            </h2>
+            <!-- Botón de engranaje -->
+            <a href="{{ route('usuarios.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition duration-200">
+                <i class="fas fa-cog text-2xl"></i>
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
