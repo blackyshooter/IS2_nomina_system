@@ -39,7 +39,7 @@
                     @foreach($empleados as $empleado)
                         <tr class="border-t border-gray-300 dark:border-gray-700">
                             <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">{{ $empleado->cedula }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">{{ $empleado->personas->nombre }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">{{ $empleado->persona->nombre }}</td>
                             <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">{{ $empleado->persona->apellido }}</td>
                             <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">{{ $empleado->cargo }}</td>
                             <td class="px-4 py-2 text-sm text-gray-800 dark:text-gray-200">{{ $empleado->sueldo_base }}</td>
