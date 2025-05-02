@@ -8,37 +8,30 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasRoles, HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'id_usuario'; // string
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'id_usuario', 'email', 'password', 'nombre_usuario', 'id_empleado', 'id_rol'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol');
+    }
+
+
     protected function casts(): array
     {
         return [

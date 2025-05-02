@@ -1,13 +1,12 @@
-{{-- filepath: c:\Users\ferch\Documents\GitHub\IS2_nomina_system\resources\views\welcome.blade.php --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bienvenido</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Script para alternar entre modo claro y oscuro
         function toggleDarkMode() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
@@ -19,7 +18,6 @@
             }
         }
 
-        // Configuración inicial del tema
         document.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('theme') === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -54,11 +52,6 @@
                         <a href="{{ route('login') }}" class="w-full text-center bg-blue-600 dark:bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600">
                             Iniciar Sesión
                         </a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="w-full text-center bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
-                                Registrarse
-                            </a>
-                        @endif
                     @endauth
                 </div>
             @endif
