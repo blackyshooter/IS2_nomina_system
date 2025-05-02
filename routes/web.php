@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
 
     // Rutas manuales para empleados
     Route::get('/empleados', [EmpleadoController::class, 'index'])->name('empleados.index');
+    Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
+    Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
     Route::get('/empleados/{id}/edit', [EmpleadoController::class, 'edit'])->name('empleados.edit');
     Route::put('/empleados/{id}', [EmpleadoController::class, 'update'])->name('empleados.update');
     Route::delete('/empleados/{id}', [EmpleadoController::class, 'destroy'])->name('empleados.destroy');
@@ -37,16 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/reportes/liquidaciones', [ReporteController::class, 'liquidaciones'])->name('reportes.liquidaciones');
 });
 
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.dashboard');
-    })->name('admin');
-    // Futuras rutas protegidas: crear empleados, asignar usuarios, etc.
-    Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
-    Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 });
-
 
 Route::post('/session/ping', function () {
     return response()->json(['status' => 'active']);

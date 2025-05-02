@@ -1,61 +1,69 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Agregar Empleado</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Registrar Nuevo Empleado') }}
+        </h2>
     </x-slot>
 
-    <div class="py-6 px-4">
-        <form method="POST" action="{{ route('empleados.store') }}">
+    <div class="max-w-4xl mx-auto mt-8 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Registrar Nuevo Empleado</h2>
+
+        <form action="{{ route('empleados.store') }}" method="POST">
             @csrf
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Datos personales -->
+            <!-- Datos Personales -->
+            <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Datos Personales</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="nombre" class="block">Nombre</label>
-                    <input type="text" name="nombre" class="w-full rounded" required>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cédula</label>
+                    <input type="number" name="cedula" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('cedula') }}" required>
                 </div>
-                <div>
-                    <label for="apellido" class="block">Apellido</label>
-                    <input type="text" name="apellido" class="w-full rounded" required>
-                </div>
-                <div>
-                    <label for="cedula" class="block">Cédula</label>
-                    <input type="text" name="cedula" class="w-full rounded" required>
-                </div>
-                <!-- Más campos aquí -->
 
-                <!-- Sección de hijos -->
-                <div class="col-span-2 mt-4">
-                    <label for="hijos" class="block mb-2">Hijos (Nombre y Edad)</label>
-                    <div id="hijos-container" class="space-y-2">
-                        <div class="flex gap-2">
-                            <input type="text" name="hijos[0][nombre]" placeholder="Nombre" class="rounded w-1/2" required>
-                            <input type="number" name="hijos[0][edad]" placeholder="Edad" class="rounded w-1/2" required>
-                        </div>
-                    </div>
-                    <button type="button" onclick="agregarHijo()" class="mt-2 px-4 py-1 bg-green-500 text-white rounded">
-                        + Agregar otro hijo
-                    </button>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
+                    <input type="text" name="nombre" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('nombre') }}" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellido</label>
+                    <input type="text" name="apellido" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('apellido') }}" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Nacimiento</label>
+                    <input type="date" name="fecha_nacimiento" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('fecha_nacimiento') }}" required>
                 </div>
             </div>
 
-            <button type="submit" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                Guardar Empleado
-            </button>
+            <!-- Datos Laborales -->
+            <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mt-8 mb-4">Datos Laborales</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
+                    <input type="text" name="telefono" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('telefono') }}" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sueldo Base</label>
+                    <input type="number" step="0.01" name="sueldo_base" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('sueldo_base') }}" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Ingreso</label>
+                    <input type="date" name="fecha_ingreso" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('fecha_ingreso') }}" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cargo</label>
+                    <input type="text" name="cargo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" value="{{ old('cargo') }}" required>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="mt-8 flex justify-end space-x-4">
+                <a href="{{ route('empleados.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-md shadow-md hover:bg-gray-600">Cancelar</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700">Guardar</button>
+            </div>
         </form>
     </div>
-
-    <script>
-        let hijoIndex = 1;
-        function agregarHijo() {
-            const container = document.getElementById('hijos-container');
-            const div = document.createElement('div');
-            div.classList.add('flex', 'gap-2');
-            div.innerHTML = `
-                <input type="text" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre" class="rounded w-1/2" required>
-                <input type="number" name="hijos[${hijoIndex}][edad]" placeholder="Edad" class="rounded w-1/2" required>
-            `;
-            container.appendChild(div);
-            hijoIndex++;
-        }
-    </script>
 </x-app-layout>
