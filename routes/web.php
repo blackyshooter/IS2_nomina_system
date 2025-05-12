@@ -26,21 +26,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/empleados/{id}/edit', [EmpleadoController::class, 'edit'])->name('empleados.edit');
     Route::put('/empleados/{id}', [EmpleadoController::class, 'update'])->name('empleados.update');
     Route::delete('/empleados/{id}', [EmpleadoController::class, 'destroy'])->name('empleados.destroy');
+    // En routes/web.php
+    Route::get('/empleados/reporte', [EmpleadoController::class, 'reporte'])->name('empleados.reporte');
 
-    Route::resource('liquidaciones', LiquidacionController::class);
+
+    // Ruta para el reporte de empleados
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
 });
-
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin');
-    // Futuras rutas protegidas: crear empleados, asignar usuarios, etc.
+
+    // Rutas para crear y almacenar empleados
     Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
 });
-
 
 Route::post('/session/ping', function () {
     return response()->json(['status' => 'active']);

@@ -26,5 +26,4 @@ class Empleado extends Model
     {
         return $this->hasMany(Hijo::class, 'id_empleado');
     }
-
 }
