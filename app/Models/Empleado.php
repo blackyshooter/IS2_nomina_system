@@ -9,13 +9,17 @@ class Empleado extends Model
     protected $table = 'empleados';
     protected $primaryKey = 'id_empleado';
 
-    protected $fillable = [
-        'cedula',
-        'telefono',
-        'sueldo_base',
-        'fecha_ingreso',
-        'cargo'
-    ];
+   protected $fillable = [
+    'id_empleado',
+    'nombre',
+    'apellido',
+    'fecha_ingreso',
+    'cedula',
+    'correo',
+    'telefono',
+    'fecha_nacimiento',
+];
+
 
     public function persona()
     {
