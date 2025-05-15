@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Empleado;
-use App\Models\Persona;
-use App\Models\Hijo;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Carbon\Carbon; // Importar Carbon para trabajar con fechas
 
 class EmpleadoController extends Controller
 {
     public function index()
     {
-        $empleados = Empleado::with('persona', 'hijos')->get();
+        $empleados = Empleado::withCount('hijos')
+            ->withCount(['hijos as hijos_menores_18_count' => function ($query) {
+                $query->where('fecha_nacimiento', '>', Carbon::now()->subYears(18));
+            }])
+            ->paginate(10);
+
         return view('empleados.index', compact('empleados'));
     }
 
@@ -24,109 +27,82 @@ class EmpleadoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'cedula' => 'required|numeric|unique:personas,cedula',
-            'nombre' => 'required|string|max:25',
-            'apellido' => 'required|string|max:25',
-            'fecha_nacimiento' => 'required|date',
-            'telefono' => 'required|string|max:25',
-            'sueldo_base' => 'required|numeric|min:0',
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
             'fecha_ingreso' => 'required|date',
-            'cargo' => 'required|string|max:25',
-            'hijos' => 'array',
-            'hijos.*.nombre' => 'required|string|max:25',
-            'hijos.*.apellido' => 'required|string|max:25',
-            'hijos.*.fecha_nacimiento' => 'required|date',
-        ]);
-
-        // Crear persona
-        $persona = Persona::create([
-            'cedula' => $request->cedula,
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'cedula' => 'required|string|unique:empleados,cedula',
+            'correo' => 'required|email|unique:empleados,correo',
+            'telefono' => 'nullable|string|max:20',
+            'fecha_nacimiento' => 'required|date',
+            'hijos' => 'nullable|array',
+            'hijos.*.nombre' => 'required_with:hijos|string|max:255',
+            'hijos.*.fecha_nacimiento' => 'required_with:hijos|date',
         ]);
 
         // Crear empleado
-        $empleado = Empleado::create([
-            'cedula' => $persona->cedula,
-            'telefono' => $request->telefono,
-            'sueldo_base' => $request->sueldo_base,
-            'fecha_ingreso' => $request->fecha_ingreso,
-            'cargo' => $request->cargo,
-        ]);
+        $empleado = Empleado::create($request->only([
+            'nombre', 'apellido', 'fecha_ingreso', 'cedula', 'correo', 'telefono', 'fecha_nacimiento'
+        ]));
 
-        // Crear hijos, si los hay
+        // Si vienen hijos, crear cada uno asociado
         if ($request->has('hijos')) {
             foreach ($request->hijos as $hijoData) {
-                $empleado->hijos()->create([
-                    'nombre' => $hijoData['nombre'],
-                    'apellido' => $hijoData['apellido'],
-                    'fecha_nacimiento' => $hijoData['fecha_nacimiento'],
-                ]);
+                $empleado->hijos()->create($hijoData);
             }
         }
 
-        return redirect()->route('empleados.index')->with('success', 'Empleado creado correctamente.');
+        return redirect()->route('empleados.index')->with('success', 'Empleado creado correctamente');
+    }
+
+    public function show(Empleado $empleado)
+    {
+        $empleado->load('hijos');
+        return view('empleados.show', compact('empleado'));
     }
 
     public function edit($id)
     {
-        $empleado = Empleado::with('persona', 'hijos')->findOrFail($id);
+        $empleado = Empleado::with('hijos')->findOrFail($id);
         return view('empleados.edit', compact('empleado'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Empleado $empleado)
     {
-        $empleado = Empleado::findOrFail($id);
-        $persona = $empleado->persona;
-
         $request->validate([
-            'nombre' => 'required|string|max:25',
-            'apellido' => 'required|string|max:25',
-            'fecha_nacimiento' => 'required|date',
-            'telefono' => 'required|string|max:25',
-            'sueldo_base' => 'required|numeric|min:0',
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
             'fecha_ingreso' => 'required|date',
-            'cargo' => 'required|string|max:25',
+            'cedula' => 'required|string|unique:empleados,cedula,' . $empleado->id_empleado,
+            'correo' => 'required|email|unique:empleados,correo,' . $empleado->id_empleado,
+            'telefono' => 'nullable|string|max:20',
+            'fecha_nacimiento' => 'required|date',
+            'hijos' => 'nullable|array',
+            'hijos.*.nombre' => 'required_with:hijos|string|max:255',
+            'hijos.*.fecha_nacimiento' => 'required_with:hijos|date',
         ]);
 
-        $persona->update([
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'fecha_nacimiento' => $request->fecha_nacimiento,
-        ]);
+        // Actualizar empleado
+        $empleado->update($request->only([
+            'nombre', 'apellido', 'fecha_ingreso', 'cedula', 'correo', 'telefono', 'fecha_nacimiento'
+        ]));
 
-        $empleado->update([
-            'telefono' => $request->telefono,
-            'sueldo_base' => $request->sueldo_base,
-            'fecha_ingreso' => $request->fecha_ingreso,
-            'cargo' => $request->cargo,
-        ]);
-
-        return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
-    }
-
-    public function destroy($id)
-    {
-        $empleado = Empleado::findOrFail($id);
-        $empleado->persona->delete();
-        $empleado->delete();
-
-        return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente.');
-    }
-
-    public function reporte()
-    {
-        $empleados = Empleado::with(['persona', 'hijos'])->get();
-
-        foreach ($empleados as $empleado) {
-            $hijosMenores = $empleado->hijos->filter(function ($hijo) {
-                return Carbon::parse($hijo->fecha_nacimiento)->age < 18;
-            })->count();
-
-            $empleado->hijos_menores = $hijosMenores;
+        // Actualizar hijos: eliminar todos y crear de nuevo
+        if ($request->has('hijos')) {
+            $empleado->hijos()->delete();
+            foreach ($request->hijos as $hijoData) {
+                $empleado->hijos()->create($hijoData);
+            }
         }
 
-        return view('empleados.reporte', compact('empleados'));
+        return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente');
+    }
+
+    public function destroy(Empleado $empleado)
+    {
+        // Primero borrar hijos para evitar error FK
+        $empleado->hijos()->delete();
+        $empleado->delete();
+
+        return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente');
     }
 }

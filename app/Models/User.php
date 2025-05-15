@@ -2,41 +2,32 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
-
 
 class User extends Authenticatable
 {
     use Notifiable;
 
     protected $table = 'users';
-    protected $primaryKey = 'id_usuario'; // string
-    public $incrementing = false;
-    protected $keyType = 'string';
+    protected $primaryKey = 'id_usuario';
+    public $timestamps = true; // Cambia a false si no usas timestamps
 
     protected $fillable = [
-        'id_usuario', 'email', 'password', 'nombre_usuario', 'id_empleado', 'id_rol'
+        'email',
+        'password',
+        'nombre_usuario',
+        'id_empleado',
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token', // si usas remember_token
     ];
 
-    public function rol()
+    // Relación con empleado (si quieres)
+    public function empleado()
     {
-        return $this->belongsTo(Rol::class, 'id_rol');
-    }
-
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Empleado::class, 'id_empleado', 'id_empleado');
     }
 }

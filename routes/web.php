@@ -2,11 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmpleadoController;
-use App\Http\Controllers\LiquidacionController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UsuarioController;  // Agregado para usuarios
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,29 +16,34 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Rutas manuales para empleados
-    Route::get('/empleados', [EmpleadoController::class, 'index'])->name('empleados.index');
-    Route::get('/empleados/{id}/edit', [EmpleadoController::class, 'edit'])->name('empleados.edit');
-    Route::put('/empleados/{id}', [EmpleadoController::class, 'update'])->name('empleados.update');
-    Route::delete('/empleados/{id}', [EmpleadoController::class, 'destroy'])->name('empleados.destroy');
-    // En routes/web.php
-    Route::get('/empleados/reporte', [EmpleadoController::class, 'reporte'])->name('empleados.reporte');
+    // Ruta reporte EMPLEADOS ANTES DEL RESOURCE
+    Route::get('empleados/reporte', [EmpleadoController::class, 'reporte'])->name('empleados.reporte');
 
+    // Rutas resource EMPLEADOS
+    Route::resource('empleados', EmpleadoController::class);
 
-    // Ruta para el reporte de empleados
+    // Reportes generales
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
+
+    // Gestión de usuarios sin permisos aún, solo autenticación
+    Route::resource('usuarios', UsuarioController::class);
 });
+
+Route::get('/liquidaciones', function () {
+    return redirect()->route('dashboard');
+})->name('liquidaciones.index')->middleware('auth');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin');
 
-    // Rutas para crear y almacenar empleados
+    // Opcional: crear empleado admin
     Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
 });
