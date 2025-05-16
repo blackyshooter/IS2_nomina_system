@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UsuarioController;  // Agregado para usuarios
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\LiquidacionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,17 +22,28 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Ruta reporte EMPLEADOS ANTES DEL RESOURCE
+    // Reporte empleados antes del resource
     Route::get('empleados/reporte', [EmpleadoController::class, 'reporte'])->name('empleados.reporte');
 
-    // Rutas resource EMPLEADOS
+    // Rutas resource empleados
     Route::resource('empleados', EmpleadoController::class);
 
     // Reportes generales
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
-    // Gestión de usuarios sin permisos aún, solo autenticación
+    // Gestión usuarios (solo autenticación)
     Route::resource('usuarios', UsuarioController::class);
+
+    // Rutas para liquidaciones
+    Route::prefix('liquidaciones')->group(function () {
+        Route::get('individual', [LiquidacionController::class, 'individual'])->name('liquidaciones.individual');
+        Route::get('total', [LiquidacionController::class, 'total'])->name('liquidaciones.total');
+        Route::post('total/liquidar', [LiquidacionController::class, 'liquidarTotal'])->name('liquidaciones.liquidar-total');
+        Route::get('personalizado', [LiquidacionController::class, 'personalizado'])->name('liquidaciones.personalizado');
+        Route::post('personalizado/liquidar', [LiquidacionController::class, 'liquidarPersonalizado'])->name('liquidaciones.liquidarPersonalizado');
+        Route::get('{empleado}', [LiquidacionController::class, 'show'])->name('liquidaciones.show');
+        Route::post('{empleado}/liquidar', [LiquidacionController::class, 'liquidar'])->name('liquidaciones.liquidar');
+    });
 });
 
 Route::get('/liquidaciones', function () {
@@ -43,7 +55,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin');
 
-    // Opcional: crear empleado admin
+    // Crear empleado admin
     Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
     Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
 });

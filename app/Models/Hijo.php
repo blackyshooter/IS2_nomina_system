@@ -12,7 +12,7 @@ class Hijo extends Model
     protected $table = 'hijos';
     protected $primaryKey = 'id_hijo';
 
-    protected $fillable = ['id_empleado', 'nombre', 'apellido', 'fecha_nacimiento'];
+    protected $fillable = ['empleado_id', 'nombre', 'apellido', 'fecha_nacimiento'];
 
     public function empleado()
     {

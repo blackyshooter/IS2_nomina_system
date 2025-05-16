@@ -55,10 +55,24 @@
                         </div>
 
                         <!-- Gestión de Liquidaciones -->
-                        <a href="{{ route('liquidaciones.index') }}" class="block bg-green-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
-                            <i class="fas fa-file-invoice-dollar text-3xl mb-2"></i>
-                            <span class="block text-lg font-semibold">Gestión de Liquidaciones</span>
-                        </a>
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open"
+                                class="block w-full bg-green-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
+                                <i class="fas fa-file-invoice-dollar text-3xl mb-2"></i>
+                                <span class="block text-lg font-semibold">Gestión de Liquidaciones</span>
+                            </button>
+
+                            <!-- Submenú -->
+                            <div x-show="open" @click.outside="open = false"
+                                class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
+                                <a href="{{ route('liquidaciones.individual') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Liquidación Individual</a>
+                                <a href="{{ route('liquidaciones.total') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Liquidación Total</a>
+                                <a href="{{ route('liquidaciones.personalizado') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Liquidación Personalizada</a>
+                            </div>
+                        </div>
 
                         <!-- Generar Reportes -->
                         <a href="{{ route('reportes.index') }}" class="block bg-purple-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-purple-700 transition duration-300">

@@ -24,11 +24,9 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Teléfono</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fecha Ingreso</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fecha Nac.</th>
-
-                        <!-- Nuevas columnas -->
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Hijos</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hijos Menores 18</th>
-
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Salario Base</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
@@ -46,15 +44,15 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ optional($empleado->fecha_nacimiento)->format('d/m/Y') ?? '-' }}
                             </td>
-
-                            <!-- Datos hijos -->
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $empleado->hijos_count ?? 0 }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $empleado->hijos_menores_18_count ?? 0 }}
                             </td>
-
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                {{ number_format($empleado->salario_base, 0, ',', '.') }} Gs.
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-center space-x-2">
                                 <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" 
                                    class="text-indigo-600 hover:text-indigo-900 font-semibold">Editar</a>
@@ -68,7 +66,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="px-6 py-4 text-center text-gray-400 dark:text-gray-500">No hay empleados registrados.</td>
+                            <td colspan="11" class="px-6 py-4 text-center text-gray-400 dark:text-gray-500">No hay empleados registrados.</td>
                         </tr>
                     @endforelse
                 </tbody>

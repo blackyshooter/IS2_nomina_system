@@ -66,6 +66,14 @@
                 </div>
             </div>
 
+            {{-- Sueldo Base --}}
+            <div>
+                <label for="sueldo_base" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Sueldo Base</label>
+                <input type="number" step="0.01" name="sueldo_base" id="sueldo_base" value="{{ old('sueldo_base', $empleado->sueldo_base) }}"
+                    class="w-full rounded-md border bg-gray-50 dark:bg-gray-700 dark:text-gray-100 px-4 py-2" required>
+                @error('sueldo_base') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
+            </div>
+
             {{-- Hijos --}}
             <div>
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Hijos (Opcional)</h3>
