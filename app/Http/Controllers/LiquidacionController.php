@@ -97,4 +97,28 @@ class LiquidacionController extends Controller
 
         return redirect()->route('liquidaciones.personalizado')->with('success', 'Liquidación personalizada guardada correctamente.');
     }
+
+    //filtro
+    // En LiquidacionController.php
+
+    public function empleadosPorPeriodo(Request $request)
+    {
+    $request->validate([
+        'periodo' => 'required|date_format:Y-m', // Asegura que el periodo venga en formato YYYY-MM
+    ]);
+
+    $periodo = $request->periodo;
+
+    // Obtener empleados que NO tienen liquidación para ese período
+    $empleadosFaltantes = Empleado::whereDoesntHave('liquidacionCabecera', function ($query) use ($periodo) {
+        $query->where('periodo', $periodo);
+    })
+    ->withCount(['hijos as hijos_menores_18_count' => function ($q) {
+        $q->where('fecha_nacimiento', '>', now()->subYears(18));
+    }])
+    ->paginate(10);
+
+    return view('liquidaciones.empleados_por_periodo', compact('empleadosFaltantes', 'periodo'));
+    }
+
 }

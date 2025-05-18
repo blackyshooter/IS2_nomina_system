@@ -10,18 +10,18 @@
             @csrf
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 space-y-4">
 
-                @foreach($detalle['items'] as $concepto)
+                @foreach($detalle['conceptos'] as $concepto)
                     <div class="flex justify-between items-center">
                         <label class="font-semibold">{{ $concepto['descripcion'] }}</label>
-                        <input type="number" step="0.01" min="0" name="montos[{{ $concepto['tipo_concepto'] }}]" 
-                               value="{{ old('montos.' . $concepto['tipo_concepto'], $concepto['monto']) }}"
+                        <input type="number" step="0.01" min="0" name="montos[{{ $concepto['concepto_id'] }}]" 
+                               value="{{ old('montos.' . $concepto['concepto_id'], $concepto['monto']) }}"
                                class="border rounded px-3 py-1 w-32 text-right" required>
                     </div>
                 @endforeach
 
                 <div class="flex justify-between font-bold text-lg pt-4 border-t border-gray-300">
                     <span>Total a Pagar:</span>
-                    <span>{{ number_format($detalle['total'], 0, ',', '.') }} Gs.</span>
+                    <span>{{ number_format($detalle['total_neto'], 0, ',', '.') }} Gs.</span>
                 </div>
 
                 <div class="pt-6">

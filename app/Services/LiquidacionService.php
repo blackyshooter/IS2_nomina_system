@@ -4,23 +4,14 @@ namespace App\Services;
 
 use App\Models\Empleado;
 use App\Models\ConceptoSalarial;
-use App\Models\Parametro;
 use App\Models\Liquidacion;
 
 class LiquidacionService
 {
-    /**
-     * Obtiene los conceptos fijos para la liquidación de un empleado,
-     * con sus respectivos montos calculados.
-     *
-     * @param Empleado $empleado
-     * @return array
-     */
     public function obtenerConceptosFijos(Empleado $empleado): array
     {
         $conceptos = [];
 
-        // Salario Base
         $conceptoSalario = ConceptoSalarial::where('descripcion', 'Salario Base')->first();
         if ($conceptoSalario) {
             $conceptos[] = [
@@ -31,7 +22,6 @@ class LiquidacionService
             ];
         }
 
-        // Bonificación por hijos (usamos función del modelo Empleado)
         $conceptoBonif = ConceptoSalarial::where('descripcion', 'Bonificación por hijos')->first();
         if ($conceptoBonif) {
             $montoBonif = $empleado->bonificacionPorHijos();
@@ -43,7 +33,6 @@ class LiquidacionService
             ];
         }
 
-        // Descuento IPS (ejemplo 9% sobre salario base)
         $conceptoIps = ConceptoSalarial::where('descripcion', 'Descuento IPS')->first();
         if ($conceptoIps) {
             $montoIps = round($empleado->salario_base * 0.09, 2);
@@ -58,12 +47,6 @@ class LiquidacionService
         return $conceptos;
     }
 
-    /**
-     * Calcula la liquidación total y detalles para un empleado.
-     *
-     * @param Empleado $empleado
-     * @return array
-     */
     public function calcularLiquidacion(Empleado $empleado): array
     {
         $conceptos = $this->obtenerConceptosFijos($empleado);
@@ -72,9 +55,9 @@ class LiquidacionService
         $totalDebito = 0;
 
         foreach ($conceptos as $concepto) {
-            if ($concepto['tipo'] === 'C') { // Crédito
+            if ($concepto['tipo'] === 'C') {
                 $totalCredito += $concepto['monto'];
-            } else { // Débito
+            } else {
                 $totalDebito += $concepto['monto'];
             }
         }
@@ -87,20 +70,9 @@ class LiquidacionService
         ];
     }
 
-    /**
-     * Guarda la liquidación para un empleado en la base de datos.
-     *
-     * @param Empleado $empleado
-     * @param array $montos Array con los montos manuales o calculados para cada concepto
-     *                      clave: concepto_id, valor: monto
-     * @return void
-     */
     public function guardarLiquidacion(Empleado $empleado, array $montos): void
     {
-        // Aquí asumimos que tenés una tabla 'liquidaciones' con:
-        // id, empleado_id, concepto_id, monto, created_at, updated_at
-
-        // Eliminar liquidaciones anteriores del empleado para el periodo (si aplica)
+        // Eliminamos liquidaciones anteriores solo del empleado (en detalle)
         Liquidacion::where('empleado_id', $empleado->id_empleado)->delete();
 
         foreach ($montos as $concepto_id => $monto) {
