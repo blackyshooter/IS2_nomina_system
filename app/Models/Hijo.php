@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hijo extends Model
 {
-    protected $fillable = ['empleado_id', 'fecha_nacimiento'];
+    //use HasFactory;
 
-    public function empleado()
-    {
-        return $this->belongsTo(Empleado::class);
-    }
+    protected $table = 'hijos';
+    protected $fillable = ['id_persona', 'id_empleado'];
 }

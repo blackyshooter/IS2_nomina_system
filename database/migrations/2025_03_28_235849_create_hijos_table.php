@@ -12,12 +12,15 @@ return new class extends Migration
     public function up()
 {
     Schema::create('hijos', function (Blueprint $table) {
-        $table->bigIncrements('id_hijo');
-        $table->unsignedBigInteger('cedula');
-        $table->unsignedBigInteger('id_empleado');
+        $table->id(); // clave primaria autoincremental (puede omitirse si usás clave compuesta)
+        $table->unsignedBigInteger('id_persona');   // hijo
+        $table->unsignedBigInteger('id_empleado');  // padre o madre
 
-        $table->foreign('cedula')->references('cedula')->on('personas')->onDelete('cascade');
+        // Claves foráneas
+        $table->foreign('id_persona')->references('id_persona')->on('personas')->onDelete('cascade');
         $table->foreign('id_empleado')->references('id_empleado')->on('empleados')->onDelete('cascade');
+
+        $table->timestamps();
     });
 }
 

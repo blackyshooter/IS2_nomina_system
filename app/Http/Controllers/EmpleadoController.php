@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Empleado;
 use App\Models\Persona;
+use App\Models\Hijo;
 
 class EmpleadoController extends Controller
 {
@@ -49,6 +50,21 @@ class EmpleadoController extends Controller
             'fecha_ingreso' => $request->fecha_ingreso,
             'cargo' => $request->cargo,
         ]);
+
+        foreach ($request->hijos as $hijo) {
+            $personaHijo = Persona::create([
+                'cedula' => $hijo['cedula'],
+                'nombre' => $hijo['nombre'],
+                'apellido' => $hijo['apellido'],
+                'fecha_nacimiento' => $hijo['fecha_nacimiento'],
+                // otros campos si son necesarios
+            ]);
+        
+            Hijo::create([
+                'id_persona' => $personaHijo->id_persona,
+                'id_empleado' => $empleado->id_empleado,
+            ]);
+        }
 
         return redirect()->route('empleados.index')->with('success', 'Empleado creado correctamente.');
     }

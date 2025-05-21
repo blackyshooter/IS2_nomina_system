@@ -8,6 +8,7 @@ class Empleado extends Model
 {
     protected $table = 'empleados';
     protected $primaryKey = 'id_empleado';
+    public $incrementing = true;
 
     protected $fillable = [
         'cedula',
