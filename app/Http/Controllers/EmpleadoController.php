@@ -37,6 +37,7 @@ class EmpleadoController extends Controller
             'salario_base' => 'required|numeric|min:0',
             'hijos' => 'nullable|array',
             'hijos.*.nombre' => 'required_with:hijos|string|max:255',
+            'hijos.*.apellido' => 'required_with:hijos|string|max:255',
             'hijos.*.fecha_nacimiento' => 'required_with:hijos|date',
         ]);
 
@@ -46,11 +47,15 @@ class EmpleadoController extends Controller
 
         if ($request->filled('hijos')) {
             $hijosFiltrados = collect($request->input('hijos'))->filter(function ($hijo) {
-                return !empty($hijo['nombre']) && !empty($hijo['fecha_nacimiento']);
+                return !empty($hijo['nombre']) && !empty($hijo['apellido']) && !empty($hijo['fecha_nacimiento']);
             });
 
             foreach ($hijosFiltrados as $hijoData) {
-                $empleado->hijos()->create($hijoData);
+                $empleado->hijos()->create([
+                    'nombre' => $hijoData['nombre'],
+                    'apellido' => $hijoData['apellido'],
+                    'fecha_nacimiento' => $hijoData['fecha_nacimiento'],
+                ]);
             }
         }
 
@@ -71,40 +76,46 @@ class EmpleadoController extends Controller
 
     public function update(Request $request, $id)
     {
-        $empleado = Empleado::findOrFail($id);
-
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'fecha_ingreso' => 'required|date',
-            'cedula' => 'required|string|unique:empleados,cedula,' . $empleado->id_empleado . ',id_empleado',
-            'correo' => 'nullable|email|unique:empleados,correo,' . $empleado->id_empleado . ',id_empleado',
-            'telefono' => 'nullable|string|max:20',
-            'fecha_nacimiento' => 'required|date',
-            'salario_base' => 'required|numeric|min:0',
-            'hijos' => 'nullable|array',
-            'hijos.*.nombre' => 'required_with:hijos|string|max:255',
-            'hijos.*.fecha_nacimiento' => 'required_with:hijos|date',
+            'hijos.*.nombre' => 'nullable|string|max:255',
+            'hijos.*.apellido' => 'nullable|string|max:255',
+            'hijos.*.fecha_nacimiento' => 'nullable|date',
         ]);
 
-        $empleado->update($request->only([
-            'nombre', 'apellido', 'fecha_ingreso', 'cedula', 'correo', 'telefono', 'fecha_nacimiento', 'salario_base'
-        ]));
+        $empleado = Empleado::findOrFail($id);
+        $empleado->update([
+            'nombre' => $request->nombre,
+            'apellido' => $request->apellido,
+        ]);
 
-        // Eliminar hijos anteriores
-        $empleado->hijos()->delete();
+        $idsEnviados = collect($request->hijos)->pluck('id')->filter()->toArray();
 
-        if ($request->filled('hijos')) {
-            $hijosFiltrados = collect($request->input('hijos'))->filter(function ($hijo) {
-                return !empty($hijo['nombre']) && !empty($hijo['fecha_nacimiento']);
-            });
+        // Eliminar hijos no incluidos
+        $empleado->hijos()->whereNotIn('id', $idsEnviados)->delete();
 
-            foreach ($hijosFiltrados as $hijoData) {
-                $empleado->hijos()->create($hijoData);
+        if ($request->has('hijos')) {
+            foreach ($request->hijos as $hijo) {
+                if (isset($hijo['id'])) {
+                    // Actualizar
+                    $empleado->hijos()->where('id', $hijo['id'])->update([
+                        'nombre' => $hijo['nombre'],
+                        'apellido' => $hijo['apellido'],
+                        'fecha_nacimiento' => $hijo['fecha_nacimiento'],
+                    ]);
+                } else {
+                    // Crear
+                    $empleado->hijos()->create([
+                        'nombre' => $hijo['nombre'],
+                        'apellido' => $hijo['apellido'],
+                        'fecha_nacimiento' => $hijo['fecha_nacimiento'],
+                    ]);
+                }
             }
         }
 
-        return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente');
+        return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
     }
 
     public function destroy(Empleado $empleado)
@@ -122,7 +133,7 @@ class EmpleadoController extends Controller
         }])
         ->select('id_empleado', 'nombre', 'apellido', 'salario_base')
         ->paginate(10);
-    
+
         return view('liquidaciones.individual', compact('empleados'));
     }
 }

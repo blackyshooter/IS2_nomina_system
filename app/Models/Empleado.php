@@ -23,10 +23,35 @@ class Empleado extends Model
         'salario_base',
     ];
 
+    protected $casts = [
+        'fecha_ingreso' => 'datetime',
+        'fecha_nacimiento' => 'datetime',
+    ];
+
     // Relación con hijos
     public function hijos()
     {
         return $this->hasMany(Hijo::class, 'empleado_id', 'id_empleado');
+    }
+
+    // Relación con detalles de liquidación (detalle_liquidacion)
+    public function liquidacionDetalles()
+    {
+        return $this->hasMany(DetalleLiquidacion::class, 'empleado_id', 'id_empleado');
+    }
+
+    // Relación indirecta con liquidacion_cabeceras a través de detalles
+    public function liquidacionCabeceras()
+    {
+        // Por la tabla detalle_liquidacion que tiene liquidacion_id que apunta a liquidacion_cabeceras.id_liquidacion_cabecera
+        return $this->hasManyThrough(
+            LiquidacionCabecera::class,    // Modelo destino
+            LiquidacionDetalle::class,     // Modelo intermedio
+            'empleado_id',                 // FK en LiquidacionDetalle que apunta a Empleado
+            'id_liquidacion_cabecera',     // PK en LiquidacionCabecera
+            'id_empleado',                 // PK en Empleado
+            'liquidacion_id'               // FK en LiquidacionDetalle que apunta a LiquidacionCabecera
+        );
     }
 
     public function getRouteKeyName()
@@ -34,69 +59,35 @@ class Empleado extends Model
         return 'id_empleado';
     }
 
-    // Para que Laravel trate estas columnas como fechas Carbon
-    protected $dates = ['fecha_ingreso', 'fecha_nacimiento'];
-
-    // Accessor para fecha_ingreso
-    public function getFechaIngresoAttribute($value)
-    {
-        return $value ? Carbon::parse($value) : null;
-    }
-
-    // Accessor para fecha_nacimiento
-    public function getFechaNacimientoAttribute($value)
-    {
-        return $value ? Carbon::parse($value) : null;
-    }
-
-    /**
-     * Calcula la bonificación por hijos menores de 18 años
-     * si el salario_base es menor a 3 veces el salario mínimo oficial.
-     *
-     * @return float Monto de bonificación
-     */
+    // Bonificación por hijos menores de 18 años (igual que antes)
     public function bonificacionPorHijos()
     {
-        // Obtener el salario mínimo oficial
         $salarioMinimo = (float) \App\Models\Parametro::obtenerValor('salario_minimo_oficial');
 
-        // Si no está definido, retornar 0 para evitar error
         if (!$salarioMinimo) {
             return 0;
         }
 
-        // Verificar condición salario_base < 3 * salario mínimo
         if ($this->salario_base >= 3 * $salarioMinimo) {
             return 0;
         }
 
-        // Contar hijos menores de 18 años
         $hijosMenores = $this->hijos->filter(function($hijo) {
-            return Carbon::parse($hijo->fecha_nacimiento)->diffInYears(Carbon::now()) < 18;
+            return Carbon::parse($hijo->fecha_nacimiento)->age < 18;
         })->count();
 
         if ($hijosMenores === 0) {
             return 0;
         }
 
-        // Calcular bonificación: 5% del salario mínimo por hijo menor
-        $bonificacion = $hijosMenores * 0.05 * $salarioMinimo;
-
-        return round($bonificacion, 2);
+        return round($hijosMenores * 0.05 * $salarioMinimo, 2);
     }
 
-    /**
-     * Calcula el IPS sobre conceptos imponibles para una liquidación dada.
-     *
-     * @param int $idLiquidacion ID de la liquidación cabecera
-     * @return array ['total_imponible' => float, 'ips' => float]
-     */
+    // Cálculo IPS sobre conceptos imponibles para liquidación dada
     public function calcularIps($idLiquidacion)
     {
-        // Obtener el salario base (siempre imponible)
         $salarioBase = $this->salario_base;
 
-        // Obtener conceptos imponibles de detalle_liquidacion para esta liquidacion y empleado
         $conceptosImponibles = \DB::table('detalle_liquidacion as dl')
             ->join('conceptos_salariales as cs', 'dl.concepto_id', '=', 'cs.id_concepto')
             ->where('dl.empleado_id', $this->id_empleado)
@@ -105,13 +96,10 @@ class Empleado extends Model
             ->select('dl.monto')
             ->get();
 
-        // Sumar los montos imponibles (excluyendo salario_base si está repetido en conceptos)
         $totalConceptos = $conceptosImponibles->sum('monto');
 
-        // Total imponible = salario_base + suma conceptos imponibles
         $totalImponible = $salarioBase + $totalConceptos;
 
-        // Calcular IPS (9% de total imponible)
         $ips = round($totalImponible * 0.09, 2);
 
         return [

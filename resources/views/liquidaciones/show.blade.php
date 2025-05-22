@@ -6,9 +6,29 @@
     </x-slot>
 
     <div class="py-8 max-w-3xl mx-auto sm:px-6 lg:px-8">
+
+        {{-- Mostrar errores de validación --}}
+        @if ($errors->any())
+            <div class="mb-4 text-red-600">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('liquidaciones.liquidar', $empleado->id_empleado) }}" method="POST">
             @csrf
+
+            {{-- Campo oculto para enviar el periodo --}}
+            <input type="hidden" name="periodo" value="{{ date('Y-m') }}" />
+
             <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg p-6 space-y-4">
+
+                @if(count($detalle['conceptos']) === 0)
+                    <p class="text-red-600 font-bold">No hay conceptos para liquidar.</p>
+                @endif
 
                 @foreach($detalle['conceptos'] as $concepto)
                     <div class="flex justify-between items-center">

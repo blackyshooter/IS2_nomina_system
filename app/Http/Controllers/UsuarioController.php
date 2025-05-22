@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\User;           //Importa User (no Usuario)
+use App\Models\User;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +11,7 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        $usuarios = User::with('empleado')->paginate(10);  // Usar User
+        $usuarios = User::with('empleado')->paginate(10);
         return view('usuarios.index', compact('usuarios'));
     }
 
@@ -23,7 +24,7 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|unique:users,email',  // tabla users
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'nombre_usuario' => 'required|string|max:255',
             'id_empleado' => 'required|exists:empleados,id_empleado',
@@ -39,7 +40,7 @@ class UsuarioController extends Controller
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente');
     }
 
-    public function edit(User $usuario)  // Cambiar el tipo a User
+    public function edit(User $usuario)
     {
         $empleados = Empleado::all();
         return view('usuarios.edit', compact('usuario', 'empleados'));
@@ -48,7 +49,7 @@ class UsuarioController extends Controller
     public function update(Request $request, User $usuario)
     {
         $request->validate([
-            'email' => 'required|email|unique:users,email,' . $usuario->id . ',id', // tabla users
+            'email' => 'required|email|unique:users,email,' . $usuario->id_usuario . ',id_usuario',
             'password' => 'nullable|min:6|confirmed',
             'nombre_usuario' => 'required|string|max:255',
             'id_empleado' => 'required|exists:empleados,id_empleado',
@@ -58,7 +59,7 @@ class UsuarioController extends Controller
         $usuario->nombre_usuario = $request->nombre_usuario;
         $usuario->id_empleado = $request->id_empleado;
 
-        if ($request->filled('password')) {
+        if (trim($request->password) !== '') {
             $usuario->password = Hash::make($request->password);
         }
 

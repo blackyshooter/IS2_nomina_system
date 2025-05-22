@@ -25,13 +25,13 @@ Route::middleware('auth')->group(function () {
     // Reporte empleados antes del resource
     Route::get('empleados/reporte', [EmpleadoController::class, 'reporte'])->name('empleados.reporte');
 
-    // Rutas resource empleados
+    // Rutas resource empleados (todas las rutas: index, create, store, show, edit, update, destroy)
     Route::resource('empleados', EmpleadoController::class);
 
     // Reportes generales
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
-    // Gestión usuarios (solo autenticación)
+    // Gestión usuarios
     Route::resource('usuarios', UsuarioController::class);
 
     // Rutas para liquidaciones
@@ -46,20 +46,19 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+// Ruta adicional para redirigir a dashboard si se accede directamente a /liquidaciones
 Route::get('/liquidaciones', function () {
     return redirect()->route('dashboard');
 })->name('liquidaciones.index')->middleware('auth');
 
+// Rutas solo para administradores
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     })->name('admin');
-
-    // Crear empleado admin
-    Route::get('/empleados/create', [EmpleadoController::class, 'create'])->name('empleados.create');
-    Route::post('/empleados', [EmpleadoController::class, 'store'])->name('empleados.store');
 });
 
+// Ping para mantener sesión activa
 Route::post('/session/ping', function () {
     return response()->json(['status' => 'active']);
 })->name('session.ping')->middleware('auth');

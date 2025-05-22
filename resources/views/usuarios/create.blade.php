@@ -6,6 +6,16 @@
     <form method="POST" action="{{ route('usuarios.store') }}" class="max-w-xl mx-auto p-6 bg-white dark:bg-gray-800 rounded shadow">
         @csrf
 
+        @if ($errors->any())
+            <div class="mb-4 text-red-500">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="mb-4">
             <label class="block text-gray-700 dark:text-gray-300 mb-1">Nombre de Usuario</label>
             <input type="text" name="nombre_usuario" value="{{ old('nombre_usuario') }}" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
@@ -22,6 +32,11 @@
             <label class="block text-gray-700 dark:text-gray-300 mb-1">Contraseña</label>
             <input type="password" name="password" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
             @error('password') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 dark:text-gray-300 mb-1">Confirmar Contraseña</label>
+            <input type="password" name="password_confirmation" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
         </div>
 
         <div class="mb-4">
