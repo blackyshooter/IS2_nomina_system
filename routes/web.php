@@ -7,6 +7,10 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LiquidacionController;
+use App\Http\Controllers\AusenciaController; 
+use App\Http\Controllers\PrestamoController;
+use App\Http\Controllers\NominaController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +34,9 @@ Route::middleware('auth')->group(function () {
 
     // Reportes generales
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
+    Route::get('/nominas', [ReporteController::class, 'index'])->name('nominas.index');
+     Route::resource('ausencias', AusenciaController::class);
+    Route::resource('prestamos', PrestamoController::class);
 
     // Gestión usuarios
     Route::resource('usuarios', UsuarioController::class);

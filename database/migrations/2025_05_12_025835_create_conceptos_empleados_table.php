@@ -16,6 +16,12 @@ class CreateConceptosEmpleadosTable extends Migration
             $table->decimal('monto', 10, 2);
             $table->timestamps();
         });
+        Schema::table('conceptos_empleados', function (Blueprint $table) {
+            $table->decimal('monto_mensual', 10, 2)->nullable();
+            $table->decimal('monto_total', 15, 2)->nullable(); // Hasta alcanzar este monto
+            $table->date('fecha_inicio')->nullable(); // Inicio del embargo
+            $table->date('fecha_fin')->nullable(); // Fecha límite
+        });
     }
 
     public function down()

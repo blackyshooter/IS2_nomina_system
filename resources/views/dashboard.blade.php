@@ -13,10 +13,9 @@
                     <p class="mb-8 text-center text-lg text-gray-700 dark:text-gray-300">
                         Selecciona una de las opciones para comenzar:
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-visible">
 
-                        <!-- Gestión de Empleados -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-blue-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
@@ -24,7 +23,6 @@
                                 <span class="block text-lg font-semibold">Gestión de Empleados</span>
                             </button>
 
-                            <!-- Submenú -->
                             <div x-show="open" @click.outside="open = false"
                                 class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
                                 <a href="{{ route('empleados.create') }}"
@@ -35,7 +33,6 @@
                             </div>
                         </div>
 
-                        <!-- Gestión de Usuarios -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-indigo-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300">
@@ -43,7 +40,6 @@
                                 <span class="block text-lg font-semibold">Gestión de Usuarios</span>
                             </button>
 
-                            <!-- Submenú -->
                             <div x-show="open" @click.outside="open = false"
                                 class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
                                 <a href="{{ route('usuarios.create') }}"
@@ -54,7 +50,6 @@
                             </div>
                         </div>
 
-                        <!-- Gestión de Liquidaciones -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-green-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
@@ -62,7 +57,6 @@
                                 <span class="block text-lg font-semibold">Gestión de Liquidaciones</span>
                             </button>
 
-                            <!-- Submenú -->
                             <div x-show="open" @click.outside="open = false"
                                 class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
                                 <a href="{{ route('liquidaciones.individual') }}"
@@ -74,11 +68,27 @@
                             </div>
                         </div>
 
-                        <!-- Generar Reportes -->
-                        <a href="{{ route('reportes.index') }}" class="block bg-purple-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-purple-700 transition duration-300">
-                            <i class="fas fa-chart-bar text-3xl mb-2"></i>
-                            <span class="block text-lg font-semibold">Generar Reportes</span>
-                        </a>
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open"
+                                class="block w-full bg-purple-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-purple-700 transition duration-300">
+                                <i class="fas fa-chart-bar text-3xl mb-2"></i>
+                                <span class="block text-lg font-semibold">Reportes y Descuentos</span>
+                            </button>
+
+                            <div x-show="open" @click.outside="open = false"
+                                class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
+                                <span class="block px-4 py-2 text-gray-500 font-bold text-sm uppercase">Reportes:</span>
+                                <a href="{{ route('nominas.index') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📊 General de Nómina</a>
+                                <div class="border-t border-gray-200 my-2"></div>
+
+                                <span class="block px-4 py-2 text-gray-500 font-bold text-sm uppercase">Descuentos:</span>
+                                <a href="{{ route('ausencias.index') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">🚫 Descuentos por Ausencias</a>
+                                <a href="{{ route('prestamos.index') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">💰 Descuentos por Préstamos</a>
+                                </div>
+                        </div>
 
                     </div>
                 </div>

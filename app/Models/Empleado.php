@@ -27,7 +27,15 @@ class Empleado extends Model
         'fecha_ingreso' => 'datetime',
         'fecha_nacimiento' => 'datetime',
     ];
+    public function ausencias()
+    {
+        return $this->hasMany(Ausencia::class);
+    }
 
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class);
+    }
     // Relación con hijos
     public function hijos()
     {

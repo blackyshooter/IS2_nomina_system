@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ConceptoSalarial extends Model
 {
     use HasFactory;
+    protected $table = 'conceptos_salariales';
 
-    protected $table = 'conceptos_salariales'; // 👈 Tabla real
 
-    protected $primaryKey = 'id_concepto';
+    protected $primaryKey = 'id_concepto'; // Clave primaria personalizada
 
     protected $fillable = [
         'tipo_concepto',
@@ -20,4 +20,20 @@ class ConceptoSalarial extends Model
         'afecta_ips',
         'afecta_aguinaldo',
     ];
+
+    protected $casts = [
+        'fijo' => 'boolean',
+        'afecta_ips' => 'boolean',
+        'afecta_aguinaldo' => 'boolean',
+    ];
+
+    public function conceptosEmpleados()
+    {
+        return $this->hasMany(ConceptoEmpleado::class, 'concepto_id', 'id_concepto');
+    }
+
+    public function detalleLiquidaciones()
+    {
+        return $this->hasMany(DetalleLiquidacion::class, 'concepto_id', 'id_concepto');
+    }
 }
