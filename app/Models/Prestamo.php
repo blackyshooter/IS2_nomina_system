@@ -26,6 +26,6 @@ class Prestamo extends Model
 
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class);
+        return $this->belongsTo(Empleado::class, 'empleado_id', 'id_empleado');
     }
 }

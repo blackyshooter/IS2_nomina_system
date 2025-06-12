@@ -31,7 +31,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $usuario->email }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $usuario->empleado ? $usuario->empleado->nombre . ' ' . $usuario->empleado->apellido : '-' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                <a href="{{ route('usuarios.edit', $usuario) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Editar</a>
+                                <a href="{{ route('usuarios.edit', $usuario) }}" class="text-blue-600 hover:text-blue-900 mr-2">Editar</a>
                                 <form action="{{ route('usuarios.destroy', $usuario) }}" method="POST" class="inline" onsubmit="return confirm('¿Eliminar usuario?');">
                                     @csrf
                                     @method('DELETE')

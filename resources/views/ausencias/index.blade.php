@@ -46,7 +46,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $ausencia->dias_ausente }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $ausencia->tipo_ausencia }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <a href="{{ route('ausencias.edit', $ausencia) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">Editar</a>
+                                                <a href="{{ route('ausencias.edit', $ausencia) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-600">Editar</a>
                                                 <form action="{{ route('ausencias.destroy', $ausencia) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta ausencia?');">
                                                     @csrf
                                                     @method('DELETE')

@@ -11,9 +11,16 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-2xl font-bold">Listado de Préstamos Registrados</h3>
-                        <a href="{{ route('prestamos.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                        {{-- ***************************************************************** --}}
+                        {{-- ¡CAMBIO CRÍTICO AQUÍ! Limpiando el botón "Registrar Nuevo Préstamo" --}}
+                        {{-- ***************************************************************** --}}
+                        <a href="{{ route('prestamos.create') }}"
+                           class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Registrar Nuevo Préstamo
                         </a>
+                        {{-- ***************************************************************** --}}
+                        {{-- FIN DEL CAMBIO --}}
+                        {{-- ***************************************************************** --}}
                     </div>
 
                     @if(session('success'))
@@ -41,7 +48,13 @@
                                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                     @foreach($prestamos as $prestamo)
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap">{{ $prestamo->empleado->nombre }} {{ $prestamo->empleado->apellido }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($prestamo->empleado)
+                                                {{ $prestamo->empleado->nombre }} {{ $prestamo->empleado->apellido }}
+                                            @else
+                                                <span class="text-red-500">Empleado no encontrado</span>
+                                            @endif
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap">${{ number_format($prestamo->monto_total, 2) }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">${{ number_format($prestamo->monto_cuota, 2) }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $prestamo->cuotas_restantes }}</td>
@@ -52,7 +65,7 @@
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <a href="{{ route('prestamos.edit', $prestamo) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-600">Editar</a>
+                                                <a href="{{ route('prestamos.edit', $prestamo) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-600">Editar</a>
                                                 <form action="{{ route('prestamos.destroy', $prestamo) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este préstamo?');">
                                                     @csrf
                                                     @method('DELETE')

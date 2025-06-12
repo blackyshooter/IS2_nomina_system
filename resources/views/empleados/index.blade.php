@@ -55,7 +55,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-center space-x-2">
                                 <a href="{{ route('empleados.edit', $empleado->id_empleado) }}" 
-                                   class="text-indigo-600 hover:text-indigo-900 font-semibold">Editar</a>
+                                   class="text-blue-600 hover:text-blue-900 font-semibold">Editar</a>
 
                                 <form action="{{ route('empleados.destroy', $empleado->id_empleado) }}" method="POST" class="inline" onsubmit="return confirm('¿Seguro que deseas eliminar este empleado?');">
                                     @csrf

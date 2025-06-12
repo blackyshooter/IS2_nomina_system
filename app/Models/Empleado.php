@@ -9,6 +9,7 @@ use Carbon\Carbon;
 class Empleado extends Model
 {
     use HasFactory;
+    
 
     protected $primaryKey = 'id_empleado';
 

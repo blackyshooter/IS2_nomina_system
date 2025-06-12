@@ -68,7 +68,7 @@ class PrestamoController extends Controller
     public function show(Prestamo $prestamo)
     {
         // Opcional: Implementa una vista para ver los detalles de un préstamo
-        // return view('prestamos.show', compact('prestamo'));
+        return view('prestamos.show', compact('prestamo'));
     }
 
     /**

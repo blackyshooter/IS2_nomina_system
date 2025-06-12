@@ -35,7 +35,7 @@
 
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
-                                class="block w-full bg-indigo-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300">
+                                class="block w-full bg-blue-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-yellow-700 transition duration-300">
                                 <i class="fas fa-user text-3xl mb-2"></i>
                                 <span class="block text-lg font-semibold">Gestión de Usuarios</span>
                             </button>

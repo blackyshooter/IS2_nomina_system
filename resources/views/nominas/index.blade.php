@@ -17,13 +17,13 @@
                             <div>
                                 <label for="periodo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Selecciona el Período (AAAA-MM):</label>
                                 <input type="month" id="periodo" name="periodo" value="{{ old('periodo', $periodo ?? date('Y-m')) }}" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200">
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200">
                                 @error('periodo')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="pt-6">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                     Generar Reporte
                                 </button>
                             </div>

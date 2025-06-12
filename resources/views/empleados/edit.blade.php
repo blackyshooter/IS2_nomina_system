@@ -28,7 +28,7 @@
                 'correo' => '<svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-5 w-5 mr-1 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M16 12l-4 4m0 0l-4-4m4 4V8"/></svg>',
                 'telefono' => '<svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-5 w-5 mr-1 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" d="M3 10l7 7m0 0l7-7m-7 7V3"/></svg>',
                 'salario' => '<svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-5 w-5 mr-1 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 8c-2 0-3 1-3 3s1 3 3 3"/></svg>',
-                'hijo' => '<svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-5 w-5 mr-1 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="7" r="4"/><path d="M5.5 21h13"/></svg>',
+                'hijo' => '<svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-5 w-5 mr-1 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="7" r="4"/><path d="M5.5 21h13"/></svg>',
             ];
             @endphp
 
@@ -93,7 +93,7 @@
 
             {{-- Sección Hijos --}}
             <div class="mt-8">
-                <h3 class="text-lg font-semibold mb-4 text-indigo-600 dark:text-indigo-400">Hijos</h3>
+                <h3 class="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400">Hijos</h3>
 
                 <div id="hijos-container" class="space-y-4">
                     @foreach(old('hijos', $empleado->hijos ?? []) as $index => $hijo)
@@ -120,7 +120,7 @@
                     @endforeach
                 </div>
 
-                <button type="button" id="btn-add-hijo" class="mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded">Agregar hijo</button>
+                <button type="button" id="btn-add-hijo" class="mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">Agregar hijo</button>
             </div>
 
             <div class="mt-6">

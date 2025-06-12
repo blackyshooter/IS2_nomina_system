@@ -23,7 +23,7 @@ class ReporteController extends Controller
     {
         // Puedes pasar empleados aquí si quieres un filtro por empleado
         $empleados = Empleado::orderBy('nombre')->get();
-        $reporteLiquidaciones = [];
+        $reporteLiquidaciones = new Collection(); // <--- ¡Asegúrate de que esto esté aquí!
         $periodo = $request->input('periodo'); // Ejemplo: '2024-05'
 
         if ($periodo) {

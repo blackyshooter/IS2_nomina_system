@@ -141,7 +141,7 @@
                 <a href="{{ route('empleados.index') }}"
                     class="inline-block px-5 py-2 border border-gray-600 rounded-md text-gray-400 hover:bg-gray-700 hover:text-white transition">Cancelar</a>
                 <button type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-md transition">Guardar</button>
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-md transition">Guardar</button>
             </div>
         </form>
     </div>
