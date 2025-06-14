@@ -11,16 +11,10 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-2xl font-bold">Listado de Préstamos Registrados</h3>
-                        {{-- ***************************************************************** --}}
-                        {{-- ¡CAMBIO CRÍTICO AQUÍ! Limpiando el botón "Registrar Nuevo Préstamo" --}}
-                        {{-- ***************************************************************** --}}
-                        <a href="{{ route('prestamos.create') }}"
+                           <a href="{{ route('prestamos.create') }}"
                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Registrar Nuevo Préstamo
                         </a>
-                        {{-- ***************************************************************** --}}
-                        {{-- FIN DEL CAMBIO --}}
-                        {{-- ***************************************************************** --}}
                     </div>
 
                     @if(session('success'))

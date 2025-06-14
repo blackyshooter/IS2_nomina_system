@@ -40,7 +40,13 @@
                                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                     @foreach($ausencias as $ausencia)
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap">{{ $ausencia->empleado->nombre }} {{ $ausencia->empleado->apellido }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($ausencia->empleado)
+                                                {{ $ausencia->empleado->nombre }} {{ $ausencia->empleado->apellido }}
+                                            @else
+                                                <span class="text-red-500">Empleado eliminado</span>
+                                            @endif
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $ausencia->fecha_inicio->format('d/m/Y') }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $ausencia->fecha_fin->format('d/m/Y') }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $ausencia->dias_ausente }}</td>

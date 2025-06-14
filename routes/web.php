@@ -9,7 +9,9 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LiquidacionController;
 use App\Http\Controllers\AusenciaController; 
 use App\Http\Controllers\PrestamoController;
-use App\Http\Controllers\NominaController;
+use App\Http\Controllers\EmbargoJudicialController;
+use App\Http\Controllers\RetencionSindicalController;
+//use App\Http\Controllers\NominaController;
 
 
 Route::get('/', function () {
@@ -35,7 +37,7 @@ Route::middleware('auth')->group(function () {
     // Reportes generales
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
     Route::get('/nominas', [ReporteController::class, 'index'])->name('nominas.index');
-     Route::resource('ausencias', AusenciaController::class);
+    Route::resource('ausencias', AusenciaController::class);
     Route::resource('prestamos', PrestamoController::class);
 
     // Gestión usuarios
@@ -50,6 +52,22 @@ Route::middleware('auth')->group(function () {
         Route::post('personalizado/liquidar', [LiquidacionController::class, 'liquidarPersonalizado'])->name('liquidaciones.liquidarPersonalizado');
         Route::get('{empleado}', [LiquidacionController::class, 'show'])->name('liquidaciones.show');
         Route::post('{empleado}/liquidar', [LiquidacionController::class, 'liquidar'])->name('liquidaciones.liquidar');
+    });
+
+    //RUTA DE EMBARGOS Y RETENCIONES
+    Route::prefix('descuentos')->group(function () {
+        Route::get('/embargos/create', [EmbargoJudicialController::class, 'create'])->name('embargos.create');
+        Route::post('/embargos', [EmbargoJudicialController::class, 'store'])->name('embargos.store');
+        Route::get('/embargos', [EmbargoJudicialController::class, 'index'])->name('embargos.index');
+
+        Route::resource('retenciones', RetencionSindicalController::class)->except(['show']);
+
+
+        Route::get('/retenciones/create', [RetencionSindicalController::class, 'create'])->name('retenciones.create');
+        Route::get('/retenciones/edit', [RetencionSindicalController::class, 'edit'])->name('retenciones.edit');
+        Route::post('/retenciones', [RetencionSindicalController::class, 'store'])->name('retenciones.store');
+        Route::get('/retenciones', [RetencionSindicalController::class, 'index'])->name('retenciones.index');
+
     });
 });
 

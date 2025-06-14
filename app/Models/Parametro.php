@@ -13,6 +13,8 @@ class Parametro extends Model
 
     protected $fillable = ['clave', 'valor'];
 
+   
+
     /**
      * Obtiene el valor de un parámetro dado su clave.
      *

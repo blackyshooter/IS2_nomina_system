@@ -26,6 +26,7 @@ class LiquidacionService
     {
         $conceptos = [];
 
+        // SALARIO BASE
         $conceptoSalario = ConceptoSalarial::where('descripcion', 'Salario Base')->first();
         if ($conceptoSalario) {
             $conceptos[] = [
@@ -36,6 +37,7 @@ class LiquidacionService
             ];
         }
 
+        // BONIFICACIÓN POR HIJOS
         $conceptoBonif = ConceptoSalarial::where('descripcion', 'Bonificación por hijos')->first();
         if ($conceptoBonif) {
             $salarioMinimo = $this->obtenerSalarioMinimo();
@@ -59,6 +61,7 @@ class LiquidacionService
             }
         }
 
+        // DESCUENTO IPS
         $conceptoIps = ConceptoSalarial::where('descripcion', 'Descuento IPS')->first();
         if ($conceptoIps) {
             $montoIps = round($empleado->salario_base * 0.09, 2);
@@ -70,8 +73,114 @@ class LiquidacionService
             ];
         }
 
+        // DESCUENTO POR AUSENCIAS INJUSTIFICADAS
+        $conceptoAusencia = ConceptoSalarial::where('descripcion', 'Descuento por Ausencia')->first();
+        if ($conceptoAusencia) {
+            $inicioMes = now()->startOfMonth();
+            $finMes = now()->endOfMonth();
+
+            $ausencias = $empleado->ausencias()
+                ->where('tipo_ausencia', 'injustificada')
+                ->where(function ($query) use ($inicioMes, $finMes) {
+                    $query->whereBetween('fecha_inicio', [$inicioMes, $finMes])
+                        ->orWhereBetween('fecha_fin', [$inicioMes, $finMes])
+                        ->orWhere(function ($q) use ($inicioMes, $finMes) {
+                            $q->where('fecha_inicio', '<', $inicioMes)
+                            ->where('fecha_fin', '>', $finMes);
+                        });
+                })
+                ->get();
+
+            $totalDias = 0;
+            foreach ($ausencias as $ausencia) {
+                $inicio = \Carbon\Carbon::parse($ausencia->fecha_inicio)->max($inicioMes);
+                $fin = \Carbon\Carbon::parse($ausencia->fecha_fin)->min($finMes);
+
+                if ($inicio <= $fin) {
+                    $totalDias += $inicio->diffInDays($fin) + 1;
+                }
+            }
+
+            if ($totalDias > 0 && $empleado->salario_base > 0) {
+                $salarioDiario = $empleado->salario_base / 30;
+                $montoDescuento = round($totalDias * $salarioDiario, 2);
+
+                $conceptos[] = [
+                    'concepto_id' => $conceptoAusencia->id_concepto,
+                    'descripcion' => $conceptoAusencia->descripcion,
+                    'tipo' => 'debito',
+                    'monto' => $montoDescuento,
+                ];
+            }
+        }
+
+        // RETENCIÓN SINDICAL
+        $retencionSindical = $empleado->retencionSindical;
+        $conceptoSindical = ConceptoSalarial::where('descripcion', 'Retenciones Sindicales')->first();
+        if ($retencionSindical && $conceptoSindical) {
+            $conceptos[] = [
+                'concepto_id' => $conceptoSindical->id_concepto,
+                'descripcion' => $conceptoSindical->descripcion,
+                'tipo' => 'debito',
+                'monto' => $retencionSindical->monto_mensual,
+            ];
+        }
+
+        // EMBARGO JUDICIAL
+        $embargo = $empleado->embargoJudicial;
+        $conceptoEmbargo = ConceptoSalarial::where('descripcion', 'Embargos Judiciales')->first();
+        if ($embargo && $embargo->activo && $embargo->monto_restante > 0 && $conceptoEmbargo) {
+            $montoDescontar = min($embargo->cuota_mensual, $embargo->monto_restante);
+
+            $conceptos[] = [
+                'concepto_id' => $conceptoEmbargo->id_concepto,
+                'descripcion' => $conceptoEmbargo->descripcion,
+                'tipo' => $conceptoEmbargo->tipo_concepto,
+                'monto' => $montoDescontar,
+            ];
+
+            $embargo->monto_restante -= $montoDescontar;
+            if ($embargo->monto_restante <= 0) {
+                $embargo->activo = false;
+            }
+            $embargo->save();
+        }
+
+        // PRÉSTAMOS
+        // DESCUENTOS POR PRÉSTAMOS
+        $prestamos = $empleado->prestamos()
+            ->where('activo', true)
+            ->where('monto_restante', '>', 0)
+            ->get();
+
+        foreach ($prestamos as $prestamo) {
+            $conceptoPrestamo = ConceptoSalarial::where('descripcion', 'Descuentos por Prestamos')->first();
+
+            if ($conceptoPrestamo) {
+                $montoCuota = min($prestamo->monto_cuota, $prestamo->monto_restante);
+
+
+                $conceptos[] = [
+                    'concepto_id' => $conceptoPrestamo->id_concepto,
+                    'descripcion' => $conceptoPrestamo->descripcion,
+                    'tipo' => $conceptoPrestamo->tipo_concepto,
+                    'monto' => $montoCuota,
+                ];
+
+                // Actualizar saldo del préstamo
+                $prestamo->monto_restante -= $montoDescontar;
+                if ($prestamo->monto_restante <= 0) {
+                    $prestamo->activo = false;
+                }
+                $prestamo->save();
+            }
+        }
+
+
         return $conceptos;
     }
+
+
 
     public function calcularLiquidacion(Empleado $empleado): array
     {
@@ -139,7 +248,8 @@ class LiquidacionService
     // Método para liquidar todos - puedes implementarlo según tu lógica
     public function liquidarTodos(string $periodo): array
 {
-    $empleados = Empleado::all(); // O filtrado según la lógica de total.blade.php si tienes alguna condición
+   $empleados = Empleado::with(['retencionSindical', 'embargoJudicial', 'prestamos'])->get();
+ 
 
     $resultados = [
         'liquidaciones_realizadas' => [],

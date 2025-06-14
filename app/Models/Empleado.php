@@ -12,6 +12,8 @@ class Empleado extends Model
     
 
     protected $primaryKey = 'id_empleado';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nombre',
@@ -28,14 +30,28 @@ class Empleado extends Model
         'fecha_ingreso' => 'datetime',
         'fecha_nacimiento' => 'datetime',
     ];
+    //RELACION AUSENCIAS INJUSTIFICADAS
     public function ausencias()
     {
-        return $this->hasMany(Ausencia::class);
+        return $this->hasMany(Ausencia::class, 'empleado_id', 'id_empleado');
     }
 
+    //RELACION PRESTAMOS
     public function prestamos()
     {
-        return $this->hasMany(Prestamo::class);
+        return $this->hasMany(Prestamo::class, 'empleado_id', 'id_empleado');
+    }
+    
+    //RELACION RETENCIONES SINDICALES
+    public function retencionSindical()
+    {
+        return $this->hasOne(RetencionSindical::class, 'empleado_id')->where('activo', true);
+    }
+
+    //RELACION EMBARGO JUDICIAL
+    public function embargoJudicial()
+    {
+         return $this->hasOne(EmbargoJudicial::class, 'empleado_id', 'id_empleado')->where('activo', true);
     }
     // Relación con hijos
     public function hijos()

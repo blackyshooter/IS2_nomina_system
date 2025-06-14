@@ -35,6 +35,7 @@
                         <p class="text-center text-sm text-gray-500">Asegúrate de que tienes empleados, salarios base y, si aplica, ausencias/préstamos registrados para este período.</p>
                     @elseif ($reporteLiquidaciones->isNotEmpty())
                         <h4 class="text-xl font-semibold mb-4">Reporte de Nómina para el período: {{ $periodo }}</h4>
+                        
                         @foreach ($reporteLiquidaciones as $empleadoId => $detalles)
                             @php
                                 $empleado = $detalles->first()->empleado;

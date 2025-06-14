@@ -41,7 +41,7 @@
 
         <div class="mb-4">
             <label class="block text-gray-700 dark:text-gray-300 mb-1">Empleado</label>
-            <select name="id_empleado" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
+            <select name="empleado_id" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
                 <option value="">-- Seleccionar Empleado --</option>
                 @foreach($empleados as $empleado)
                     <option value="{{ $empleado->id_empleado }}" {{ old('id_empleado') == $empleado->id_empleado ? 'selected' : '' }}>

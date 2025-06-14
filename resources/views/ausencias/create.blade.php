@@ -19,10 +19,11 @@
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200">
                                 <option value="">Seleccione un empleado</option>
                                 @foreach($empleados as $empleado)
-                                    <option value="{{ $empleado->id }}" {{ old('empleado_id') == $empleado->id ? 'selected' : '' }}>
+                                    <option value="{{ $empleado->id_empleado }}" {{ old('empleado_id') == $empleado->id_empleado ? 'selected' : '' }}>
                                         {{ $empleado->nombre }} {{ $empleado->apellido }}
                                     </option>
                                 @endforeach
+
                             </select>
                             @error('empleado_id')
                                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>

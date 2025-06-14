@@ -84,9 +84,13 @@
 
                                 <span class="block px-4 py-2 text-gray-500 font-bold text-sm uppercase">Descuentos:</span>
                                 <a href="{{ route('ausencias.index') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">🚫 Descuentos por Ausencias</a>
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Descuentos por Ausencias</a>
                                 <a href="{{ route('prestamos.index') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">💰 Descuentos por Préstamos</a>
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Descuentos por Préstamos</a>
+                                <a href="{{ route('embargos.index') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Embargos Judiciales</a>
+                                <a href="{{ route('retenciones.index') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Retenciones Sindicales</a>
                                 </div>
                         </div>
 

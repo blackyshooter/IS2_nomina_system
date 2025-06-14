@@ -10,14 +10,12 @@ class Prestamo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'empleado_id',
-        'monto_total',
-        'monto_cuota',
-        'cuotas_restantes',
-        'fecha_inicio_pago',
-        'descripcion',
-        'activo',
-    ];
+    'empleado_id',
+    'monto_total',
+    'cuota_mensual',
+    'monto_restante',
+    'activo',
+];
 
     protected $casts = [
         'fecha_inicio_pago' => 'date',

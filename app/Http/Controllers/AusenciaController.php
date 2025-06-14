@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ausencia;
-use App\Models\Empleado; // Necesitas el modelo Empleado para el dropdown
+use App\Models\Empleado; 
 use Illuminate\Http\Request;
-use Carbon\Carbon; // Para calcular días entre fechas
+use Carbon\Carbon;
 
 class AusenciaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+
     public function index()
     {
         $ausencias = Ausencia::with('empleado')->latest()->get();
@@ -33,7 +35,7 @@ class AusenciaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'empleado_id' => 'required|exists:empleados,id',
+            'empleado_id' => 'required|exists:empleados,id_empleado',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
             'tipo_ausencia' => 'required|string|in:justificada,injustificada,vacaciones,enfermedad',
@@ -80,7 +82,7 @@ class AusenciaController extends Controller
     public function update(Request $request, Ausencia $ausencia)
     {
         $request->validate([
-            'empleado_id' => 'required|exists:empleados,id',
+            'empleado_id' => 'required|exists:empleados,id_empleado',
             'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
             'tipo_ausencia' => 'required|string|in:justificada,injustificada,vacaciones,enfermedad',
