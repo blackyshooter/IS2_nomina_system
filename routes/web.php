@@ -11,6 +11,7 @@ use App\Http\Controllers\AusenciaController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\EmbargoJudicialController;
 use App\Http\Controllers\RetencionSindicalController;
+use App\Http\Controllers\ReporteEmpleadoController;
 //use App\Http\Controllers\NominaController;
 
 
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('empleados', EmpleadoController::class);
 
     // Reportes generales
-    Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
+    //Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
     Route::get('/nominas', [ReporteController::class, 'index'])->name('nominas.index');
     Route::resource('ausencias', AusenciaController::class);
     Route::resource('prestamos', PrestamoController::class);
@@ -59,10 +60,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/embargos/create', [EmbargoJudicialController::class, 'create'])->name('embargos.create');
         Route::post('/embargos', [EmbargoJudicialController::class, 'store'])->name('embargos.store');
         Route::get('/embargos', [EmbargoJudicialController::class, 'index'])->name('embargos.index');
-
         Route::resource('retenciones', RetencionSindicalController::class)->except(['show']);
-
-
         Route::get('/retenciones/create', [RetencionSindicalController::class, 'create'])->name('retenciones.create');
         Route::get('/retenciones/edit', [RetencionSindicalController::class, 'edit'])->name('retenciones.edit');
         Route::post('/retenciones', [RetencionSindicalController::class, 'store'])->name('retenciones.store');
@@ -70,6 +68,21 @@ Route::middleware('auth')->group(function () {
 
     });
 });
+
+// Ruta para reportes
+Route::prefix('reporte')->group(function () {
+    Route::get('/extracto', [ReporteEmpleadoController::class, 'extracto'])->name('reporte.extracto');
+    
+    Route::get('/extracto/imprimir', [ReporteEmpleadoController::class, 'imprimirExtracto'])->name('reporte.extracto.imprimir');
+    Route::get('/reportes/extracto-personal', [ReporteEmpleadoController::class, 'extractoPersonal'])->name('reportes.extracto.personal');
+    Route::get('/reportes/extracto-personal/imprimir', [ReporteEmpleadoController::class, 'imprimirExtracto'])->name('reportes.extracto.personal.imprimir');
+    Route::get('/embargos', [ReporteEmpleadoController::class, 'embargos'])->name('reporte.embargos');
+    Route::get('/embargos/generar', [ReporteEmpleadoController::class, 'generarEmbargos'])->name('reporte.embargos.generar');
+    Route::get('/embargos/imprimir', [ReporteEmpleadoController::class, 'imprimirEmbargos'])->name('reporte.embargos.imprimir');
+
+    Route::get('/datos-personales', [ReporteEmpleadoController::class, 'datosPersonales'])->name('reporte.datos_personales');
+});
+
 
 // Ruta adicional para redirigir a dashboard si se accede directamente a /liquidaciones
 Route::get('/liquidaciones', function () {

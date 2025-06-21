@@ -83,6 +83,16 @@
                     <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            <!--bloque de cargos-->
+            <div class="mb-4">
+                <label for="cargo" class="block text-gray-700 font-bold mb-2">Cargo:</label>
+                <select name="cargo" id="cargo" class="border rounded px-3 py-2 w-full">
+                    <option value="Administrador">Administrador</option>
+                    <option value="Gerente/RRHH">Gerente/RRHH</option>
+                    <option value="Asistente de RRHH">Asistente de RRHH</option>
+                    <option value="Empleado">Empleado</option>
+                </select>
+            </div>
 
             <!-- Salario Base -->
             <div>

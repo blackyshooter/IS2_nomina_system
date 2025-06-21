@@ -35,7 +35,7 @@
 
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
-                                class="block w-full bg-blue-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-yellow-700 transition duration-300">
+                                class="block w-full bg-yellow-500 text-white text-center py-6 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
                                 <i class="fas fa-user text-3xl mb-2"></i>
                                 <span class="block text-lg font-semibold">Gestión de Usuarios</span>
                             </button>
@@ -70,9 +70,9 @@
 
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
-                                class="block w-full bg-purple-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-purple-700 transition duration-300">
+                                class="block w-full bg-red-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-red-700 transition duration-300">
                                 <i class="fas fa-chart-bar text-3xl mb-2"></i>
-                                <span class="block text-lg font-semibold">Reportes y Descuentos</span>
+                                <span class="block text-lg font-semibold">Descuentos</span>
                             </button>
 
                             <div x-show="open" @click.outside="open = false"
@@ -93,7 +93,24 @@
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Retenciones Sindicales</a>
                                 </div>
                         </div>
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open"
+                                class="block w-full bg-purple-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-purple-700 transition duration-300">
+                                <i class="fas fa-users text-3xl mb-2"></i>
+                                <span class="block text-lg font-semibold">Reporte de Empleados</span>
+                            </button>
 
+                            <div x-show="open" @click.outside="open = false"
+                                class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
+                                <a href="{{ route('reporte.extracto') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">➕ Extracto Personal</a>
+                                <a href="{{ route('reporte.embargos') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">➕ Embargo Personal</a>
+
+                                <a href="{{ route('reporte.datos_personales') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📄 Datos Personales</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

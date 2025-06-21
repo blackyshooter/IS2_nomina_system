@@ -34,6 +34,7 @@ class EmpleadoController extends Controller
             'correo' => 'nullable|email|unique:empleados,correo',
             'telefono' => 'nullable|string|max:20',
             'fecha_nacimiento' => 'required|date',
+            'cargo' => 'required|string|max:255',
             'salario_base' => 'required|numeric|min:0',
             'hijos' => 'nullable|array',
             'hijos.*.nombre' => 'required_with:hijos|string|max:255',

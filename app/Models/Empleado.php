@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\DetalleLiquidacion;
 
 class Empleado extends Model
 {
@@ -71,9 +72,9 @@ class Empleado extends Model
         // Por la tabla detalle_liquidacion que tiene liquidacion_id que apunta a liquidacion_cabeceras.id_liquidacion_cabecera
         return $this->hasManyThrough(
             LiquidacionCabecera::class,    // Modelo destino
-            LiquidacionDetalle::class,     // Modelo intermedio
+            DetalleLiquidacion::class,     // Modelo intermedio
             'empleado_id',                 // FK en LiquidacionDetalle que apunta a Empleado
-            'id_liquidacion_cabecera',     // PK en LiquidacionCabecera
+            'id_liquidacion',              // PK en LiquidacionCabecera
             'id_empleado',                 // PK en Empleado
             'liquidacion_id'               // FK en LiquidacionDetalle que apunta a LiquidacionCabecera
         );
