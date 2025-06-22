@@ -17,7 +17,48 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+            {{-- Menú adaptado por rol --}}
+            @auth
+            <nav class="bg-white dark:bg-gray-800 shadow mb-4">
+                <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap gap-2">
+                    {{-- ADMINISTRADOR --}}
+                    @if(Auth::user()->role === 'admin')
+                        <a href="{{ route('dashboard') }}" class="text-blue-700">Dashboard</a>
+                        <a href="{{ route('empleados.index') }}" class="text-blue-700">Empleados</a>
+                        <a href="{{ route('usuarios.index') }}" class="text-blue-700">Usuarios</a>
+                        <a href="{{ route('ausencias.index') }}" class="text-blue-700">Ausencias</a>
+                        <a href="{{ route('prestamos.index') }}" class="text-blue-700">Préstamos</a>
+                        <a href="{{ route('embargos.index') }}" class="text-blue-700">Embargos</a>
+                        <a href="{{ route('retenciones.index') }}" class="text-blue-700">Retenciones</a>
+                        <a href="{{ route('liquidaciones.individual') }}" class="text-blue-700">Liquidaciones</a>
+                        <a href="{{ route('reporte.extracto') }}" class="text-blue-700">Reportes</a>
+                    @endif
+
+                    {{-- GERENTE --}}
+                    @if(Auth::user()->role === 'gerente')
+                        <a href="{{ route('empleados.index') }}" class="text-green-700">Empleados</a>
+                        <a href="{{ route('nominas.index') }}" class="text-green-700">Nóminas</a>
+                        <a href="{{ route('reporte.extracto') }}" class="text-green-700">Reportes</a>
+                    @endif
+
+                    {{-- ASISTENTE RRHH --}}
+                    @if(Auth::user()->role === 'asistente')
+                        <a href="{{ route('empleados.index') }}" class="text-orange-700">Empleados</a>
+                        <a href="{{ route('ausencias.index') }}" class="text-orange-700">Ausencias</a>
+                        <a href="{{ route('prestamos.index') }}" class="text-orange-700">Préstamos</a>
+                        <a href="{{ route('embargos.index') }}" class="text-orange-700">Embargos</a>
+                        <a href="{{ route('retenciones.index') }}" class="text-orange-700">Retenciones</a>
+                        <a href="{{ route('liquidaciones.individual') }}" class="text-orange-700">Liquidaciones</a>
+                    @endif
+
+                    {{-- EMPLEADO --}}
+                    @if(Auth::user()->role === 'empleado')
+                        <a href="{{ route('profile.edit') }}" class="text-purple-700">Mi Perfil</a>
+                        <a href="{{ route('liquidacion.empleado') }}" class="text-purple-700">Mi Liquidación</a>
+                    @endif
+                </div>
+            </nav>
+            @endauth
 
             <!-- Page Heading -->
             @isset($header)
