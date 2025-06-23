@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Models\DetalleLiquidacion;
+use App\Models\Cargo;
+use App\Models\HistorialCargo;
 
 class Empleado extends Model
 {
@@ -25,6 +27,7 @@ class Empleado extends Model
         'telefono',
         'fecha_nacimiento',
         'salario_base',
+        'cargo',
     ];
 
     protected $casts = [
@@ -133,4 +136,14 @@ class Empleado extends Model
             'ips' => $ips,
         ];
     }
+    public function historialCargos()
+    {
+        return $this->hasMany(HistorialCargo::class, 'empleado_id', 'id_empleado');
+    }
+    public function usuario()
+    {
+        return $this->hasOne(User::class, 'id_empleado', 'id_empleado');
+    }
+
+
 }

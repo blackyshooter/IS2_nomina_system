@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Empleado;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Cargo;
+use App\Models\HistorialCargo;
 
 
 class ReporteEmpleadoController extends Controller
@@ -30,7 +32,7 @@ class ReporteEmpleadoController extends Controller
         $liquidacion = $empleado->liquidacionCabeceras()
             ->whereMonth('fecha_liquidacion', $mesSeleccionado)
             ->whereYear('fecha_liquidacion', $anioSeleccionado)
-            ->with(['detalles.concepto']) // eager load para evitar N+1
+            ->with(['detalles.concepto']) 
             ->first();
 
         if (!$liquidacion) {
@@ -95,23 +97,46 @@ class ReporteEmpleadoController extends Controller
 
 
     public function imprimirEmbargos(Request $request)
-{
-    $empleado = Auth::user()->empleado;
-    $anio = $request->input('anio');
+    {
+        $empleado = Auth::user()->empleado;
+        $anio = $request->input('anio');
 
-    $embargos = $empleado->embargoJudicial()
-        ->whereYear('created_at', $anio)
-        ->get();
+        $embargos = $empleado->embargoJudicial()
+            ->whereYear('created_at', $anio)
+            ->get();
 
-    $pdf = PDF::loadView('reportes.embargos_personales_pdf', compact('empleado', 'embargos'));
+        $pdf = PDF::loadView('reportes.embargos_personales_pdf', compact('empleado', 'embargos'));
 
-    return $pdf->download('embargos_personales.pdf');
-}
+        return $pdf->download('embargos_personales.pdf');
+    }
 
 
     public function datosPersonales()
     {
-        $empleado = Auth::user()->empleado->load(['usuario', 'cargo']);
-        return view('reportes.datos_personales', compact('empleado'));
+        $empleado = auth()->user()->empleado;
+
+        $usuarioAsignado = $empleado->usuario ?? null;
+
+        $historial = $empleado->historialCargos()
+            ->with('cargo')
+            ->orderByDesc('fecha_inicio')
+            ->get();
+
+        $cargoActual = $historial->firstWhere('fecha_fin', null)?->cargo->nombre ?? 'Sin asignar';
+
+        $salarioBase = $empleado->salario_base ?? 0;
+
+        $fechaIngreso = $empleado->created_at;
+        $antiguedad = $fechaIngreso ? now()->diff($fechaIngreso) : null;
+
+        return view('reportes.datos_personales', compact(
+            'empleado',
+            'usuarioAsignado',
+            'cargoActual',
+            'historial',
+            'salarioBase',
+            'antiguedad'
+        ));
     }
+
 }

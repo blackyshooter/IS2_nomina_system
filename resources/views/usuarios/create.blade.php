@@ -15,7 +15,19 @@
                 </ul>
             </div>
         @endif
-
+        <div class="mb-4">
+            <label class="block text-gray-700 dark:text-gray-300 mb-1">Empleado</label>
+            <select name="empleado_id" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
+                <option value="">-- Seleccionar Empleado --</option>
+                @foreach($empleados as $empleado)
+                    <option value="{{ $empleado->id_empleado }}" {{ old('id_empleado') == $empleado->id_empleado ? 'selected' : '' }}>
+                        {{ $empleado->nombre }} {{ $empleado->apellido }}
+                    </option>
+                @endforeach
+            </select>
+            @error('id_empleado') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+        </div>
+        
         <div class="mb-4">
             <label class="block text-gray-700 dark:text-gray-300 mb-1">Nombre de Usuario</label>
             <input type="text" name="nombre_usuario" value="{{ old('nombre_usuario') }}" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
@@ -39,17 +51,16 @@
             <input type="password" name="password_confirmation" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
         </div>
 
+        
+        <!--agrego cargos establecidos-->
         <div class="mb-4">
-            <label class="block text-gray-700 dark:text-gray-300 mb-1">Empleado</label>
-            <select name="empleado_id" class="w-full px-3 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" required>
-                <option value="">-- Seleccionar Empleado --</option>
-                @foreach($empleados as $empleado)
-                    <option value="{{ $empleado->id_empleado }}" {{ old('id_empleado') == $empleado->id_empleado ? 'selected' : '' }}>
-                        {{ $empleado->nombre }} {{ $empleado->apellido }}
-                    </option>
-                @endforeach
+            <label for="cargo" class="block text-gray-700 font-bold mb-2">Cargo:</label>
+            <select name="cargo" id="cargo" class="border rounded px-3 py-2 w-full">
+                <option value="Administrador">Administrador</option>
+                <option value="Gerente/RRHH">Gerente/RRHH</option>
+                <option value="Asistente de RRHH">Asistente de RRHH</option>
+                <option value="Empleado">Empleado</option>
             </select>
-            @error('id_empleado') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div class="flex space-x-4">
