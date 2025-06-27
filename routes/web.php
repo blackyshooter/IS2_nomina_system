@@ -13,7 +13,8 @@ use App\Http\Controllers\EmbargoJudicialController;
 use App\Http\Controllers\RetencionSindicalController;
 use App\Http\Controllers\ReporteEmpleadoController;
 use App\Http\Controllers\ReporteNominaController;
-
+use App\Http\Controllers\HistorialCargosController;
+use App\Http\Controllers\ConceptoSalarialController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,14 +36,19 @@ Route::middleware('auth')->group(function () {
     // Rutas resource empleados (todas las rutas: index, create, store, show, edit, update, destroy)
     Route::resource('empleados', EmpleadoController::class);
 
-    // Reportes generales
-    //Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
-    Route::get('/nominas', [ReporteController::class, 'index'])->name('nominas.index');
+    // Rutas para historial de cargos
+    Route::get('/historial-cargos', [HistorialCargosController::class, 'index'])->name('historial.cargos');
+
+
     Route::resource('ausencias', AusenciaController::class);
     Route::resource('prestamos', PrestamoController::class);
 
     // Gestión usuarios
     Route::resource('usuarios', UsuarioController::class);
+
+    // Rutas para conceptos salariales
+    Route::get('/conceptos', [ConceptoSalarialController::class, 'index'])->name('conceptos.index');
+    Route::post('/conceptos', [ConceptoSalarialController::class, 'store'])->name('conceptos.store');
 
     // Rutas para liquidaciones
     Route::prefix('liquidaciones')->group(function () {
@@ -84,6 +90,12 @@ Route::prefix('reporte')->group(function () {
     Route::get('/reporte-nomina', [ReporteNominaController::class, 'index'])->name('reporte.nomina');
     Route::get('/reporte-nomina/pdf', [ReporteNominaController::class, 'exportarPdf'])->name('reporte.nomina.pdf');
     Route::get('/reporte-nomina/excel', [ReporteNominaController::class, 'exportarExcel'])->name('reporte.nomina.excel');
+    //reporte de recibo de pago
+    // Vista de búsqueda/listado
+    Route::get('/reporte/recibos', [ReporteEmpleadoController::class, 'vistaRecibos'])->name('recibo.pago.lista');
+
+    // PDF individual
+    Route::get('/reporte/recibo/{id_empleado}/{periodo}', [ReporteEmpleadoController::class, 'generarReciboPago'])->name('recibo.pago');
 
 });
 

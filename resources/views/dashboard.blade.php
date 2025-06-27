@@ -15,7 +15,7 @@
                     </p>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-visible">
-
+                        <!-- BLOQUE DE GESTION DE EMPLEADOS -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-blue-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
@@ -27,12 +27,13 @@
                                 class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
                                 <a href="{{ route('empleados.create') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">➕ Agregar Empleado</a>
-
-                                <a href="{{ route('empleados.index') }}"
+                                 <a href="{{ route('empleados.index') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📄 Reporte de Empleados</a>
+                                <a href="{{ route('historial.cargos') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📄 Historial de Cargos</a>
                             </div>
                         </div>
-
+                        <!-- BLOQUE DE GESTION DE USUARIOS -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-yellow-500 text-white text-center py-6 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
@@ -49,7 +50,7 @@
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📋 Lista de Usuarios</a>
                             </div>
                         </div>
-
+                        <!-- BLOQUE DE GESTION DE LIQUIDACIONES -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-green-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-green-700 transition duration-300">
@@ -65,24 +66,22 @@
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Liquidación Total</a>
                                 <a href="{{ route('liquidaciones.personalizado') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Liquidación Personalizada</a>
+                                <a href="{{ route('reporte.nomina') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Reporte General de Nóminas</a>
+                                <a href="{{ route('recibo.pago.lista') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">Reporte de pago</a>
                             </div>
                         </div>
-
+                        <!-- BLOQUE DE DESCUENTOS -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-red-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-red-700 transition duration-300">
                                 <i class="fas fa-chart-bar text-3xl mb-2"></i>
                                 <span class="block text-lg font-semibold">Descuentos</span>
                             </button>
-
                             <div x-show="open" @click.outside="open = false"
                                 class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
-                                <span class="block px-4 py-2 text-gray-500 font-bold text-sm uppercase">Reportes:</span>
-                                <a href="{{ route('reporte.nomina') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📊 General de Nómina</a>
                                 <div class="border-t border-gray-200 my-2"></div>
-
-                                <span class="block px-4 py-2 text-gray-500 font-bold text-sm uppercase">Descuentos:</span>
                                 <a href="{{ route('ausencias.index') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Descuentos por Ausencias</a>
                                 <a href="{{ route('prestamos.index') }}"
@@ -91,8 +90,12 @@
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Embargos Judiciales</a>
                                 <a href="{{ route('retenciones.index') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Retenciones Sindicales</a>
-                                </div>
+                                <a href="{{ route('conceptos.index') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"> Conceptos Salariales</a>
+                            </div>
                         </div>
+
+                        <!-- BLOQUE DE REPORTE DE EMPLEADOS -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
                                 class="block w-full bg-purple-600 text-white text-center py-6 rounded-lg shadow-md hover:bg-purple-700 transition duration-300">

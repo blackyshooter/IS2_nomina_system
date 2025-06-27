@@ -11,7 +11,7 @@ class ConceptoSalarial extends Model
     protected $table = 'conceptos_salariales';
 
 
-    protected $primaryKey = 'id_concepto'; // Clave primaria personalizada
+    protected $primaryKey = 'id_concepto';
 
     protected $fillable = [
         'tipo_concepto',

@@ -23,13 +23,7 @@
                         <tr><td class="font-semibold">Salario Base:</td><td>{{ number_format($salarioBase, 0, ',', '.') }} Gs</td></tr>
                         <tr>
                             <td class="font-semibold">Antigüedad:</td>
-                            <td>
-                                @if($antiguedad)
-                                    {{ $antiguedad->y }} año(s), {{ $antiguedad->m }} mes(es)
-                                @else
-                                    No disponible
-                                @endif
-                            </td>
+                            <td>{{ $empleado->antiguedad_formatted ?? 'No disponible' }}</td>
                         </tr>
                     </tbody>
 </table>

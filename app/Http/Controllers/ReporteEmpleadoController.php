@@ -9,7 +9,8 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Cargo;
 use App\Models\HistorialCargo;
-
+use App\Models\LiquidacionCabecera;
+use App\Models\DetalleLiquidacion;
 
 class ReporteEmpleadoController extends Controller
 {
@@ -47,8 +48,6 @@ class ReporteEmpleadoController extends Controller
         ]);
     }
 
-
-    
     public function imprimirExtracto(Request $request)
     {
         $mesSeleccionado = $request->input('mes', now()->format('m'));
@@ -138,5 +137,65 @@ class ReporteEmpleadoController extends Controller
             'antiguedad'
         ));
     }
+    //recibos de pago
+    public function vistaRecibos(Request $request)
+    {
+        $periodo = $request->input('periodo', now()->format('Y-m'));
+        $busqueda = $request->input('busqueda');
+
+        $query = Empleado::with('usuario');
+
+        if ($busqueda) {
+            $query->where(function ($q) use ($busqueda) {
+                $q->where('nombre', 'ILIKE', "%{$busqueda}%")
+                ->orWhere('cedula', 'ILIKE', "%{$busqueda}%");
+            });
+        }
+
+        $empleados = $query->paginate(10)->withQueryString();
+
+        $periodoFormateado = \Carbon\Carbon::createFromFormat('Y-m', $periodo)->translatedFormat('F Y');
+
+        $estados = [];
+        foreach ($empleados as $empleado) {
+            $existe = LiquidacionCabecera::where('periodo', $periodo)
+                ->whereHas('detalles', function ($q) use ($empleado) {
+                    $q->where('empleado_id', $empleado->id_empleado);
+                })->exists();
+            $estados[$empleado->id_empleado] = $existe;
+        }
+
+        return view('reportes.lista_recibos', compact(
+            'empleados',
+            'periodo',
+            'busqueda',
+            'periodoFormateado',
+            'estados'
+        ));
+    }
+
+
+    public function generarReciboPago($id_empleado, $periodo)
+    {
+        $empleado = Empleado::with('hijos')->findOrFail($id_empleado);
+
+        $liquidacion = LiquidacionCabecera::where('periodo', $periodo)
+            ->whereHas('detalles', function ($query) use ($id_empleado) {
+                $query->where('empleado_id', $id_empleado);
+            })->firstOrFail();
+
+        $detalles = DetalleLiquidacion::where('liquidacion_id', $liquidacion->id_liquidacion)
+            ->where('empleado_id', $id_empleado)
+            ->with('concepto')
+            ->get();
+
+        $periodoFormateado = Carbon::createFromFormat('Y-m', $periodo)->translatedFormat('F Y');
+
+        $data = compact('empleado', 'periodo', 'periodoFormateado', 'liquidacion', 'detalles');
+
+        $pdf = Pdf::loadView('reportes.recibo_pago', $data);
+        return $pdf->stream("recibo_{$empleado->nombre}_{$periodo}.pdf");
+    }
+
 
 }

@@ -152,5 +152,13 @@ class Empleado extends Model
                     ->whereNull('fecha_fin')
                     ->latest('fecha_inicio');
     }
+    //Calcular antiguedad del empleado
+    public function getAntiguedadFormattedAttribute()
+    {
+        $diff = Carbon::parse($this->fecha_ingreso)->diff(Carbon::now());
+        return "{$diff->y} año(s), {$diff->m} mes(es)";
+    }
+
+
     
 }
