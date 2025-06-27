@@ -38,7 +38,7 @@ class LiquidacionService
         }
 
         // BONIFICACIÓN POR HIJOS
-        $conceptoBonif = ConceptoSalarial::where('descripcion', 'Bonificación por hijos')->first();
+        $conceptoBonif = ConceptoSalarial::where('descripcion', 'Bonificacion por hijo')->first();
         if ($conceptoBonif) {
             $salarioMinimo = $this->obtenerSalarioMinimo();
             $salarioEmpleado = $empleado->salario_base;
@@ -168,12 +168,12 @@ class LiquidacionService
                 ];
 
                 // Actualizar saldo del préstamo
-                $prestamo->monto_restante -= $montoDescontar;
+                $prestamo->monto_restante -= $montoCuota;
                 if ($prestamo->monto_restante <= 0) {
                     $prestamo->activo = false;
                 }
                 $prestamo->save();
-            }
+                }
         }
 
 

@@ -12,7 +12,7 @@ use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\EmbargoJudicialController;
 use App\Http\Controllers\RetencionSindicalController;
 use App\Http\Controllers\ReporteEmpleadoController;
-//use App\Http\Controllers\NominaController;
+use App\Http\Controllers\ReporteNominaController;
 
 
 Route::get('/', function () {
@@ -79,8 +79,12 @@ Route::prefix('reporte')->group(function () {
     Route::get('/embargos', [ReporteEmpleadoController::class, 'embargos'])->name('reporte.embargos');
     Route::get('/embargos/generar', [ReporteEmpleadoController::class, 'generarEmbargos'])->name('reporte.embargos.generar');
     Route::get('/embargos/imprimir', [ReporteEmpleadoController::class, 'imprimirEmbargos'])->name('reporte.embargos.imprimir');
-
     Route::get('/datos-personales', [ReporteEmpleadoController::class, 'datosPersonales'])->name('reporte.datos_personales');
+    //reporte de nomina general
+    Route::get('/reporte-nomina', [ReporteNominaController::class, 'index'])->name('reporte.nomina');
+    Route::get('/reporte-nomina/pdf', [ReporteNominaController::class, 'exportarPdf'])->name('reporte.nomina.pdf');
+    Route::get('/reporte-nomina/excel', [ReporteNominaController::class, 'exportarExcel'])->name('reporte.nomina.excel');
+
 });
 
 

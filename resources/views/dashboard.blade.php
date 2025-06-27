@@ -78,7 +78,7 @@
                             <div x-show="open" @click.outside="open = false"
                                 class="absolute z-10 mt-2 w-full bg-white rounded shadow-lg p-4 text-left">
                                 <span class="block px-4 py-2 text-gray-500 font-bold text-sm uppercase">Reportes:</span>
-                                <a href="{{ route('nominas.index') }}"
+                                <a href="{{ route('reporte.nomina') }}"
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📊 General de Nómina</a>
                                 <div class="border-t border-gray-200 my-2"></div>
 

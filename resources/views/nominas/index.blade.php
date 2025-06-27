@@ -91,7 +91,7 @@
                         @endforeach
 
                         <div class="mt-8 p-6 bg-blue-100 dark:bg-blue-900 rounded-lg shadow-lg text-blue-800 dark:text-blue-200">
-                            <h4 class="text-2xl font-bold text-center">Monto Total de Liquidación del Período: ${{ number_format($liquidacionCabecera->monto_total ?? 0, 2) }}</h4>
+                            <h4 class="text-2xl font-bold text-center">Monto Total de kakaroto del Período: ${{ number_format($liquidacionCabecera->monto_total ?? 0, 2) }}</h4>
                         </div>
                     @endif
                 </div>

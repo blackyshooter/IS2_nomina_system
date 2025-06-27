@@ -22,19 +22,22 @@ class DetalleLiquidacion extends Model
     {
         return $this->belongsTo(LiquidacionCabecera::class, 'liquidacion_id', 'id_liquidacion');
     }
+
     public function concepto()
     {
         return $this->belongsTo(ConceptoSalarial::class, 'concepto_id', 'id_concepto');
     }
+
     public function empleado()
     {
         return $this->belongsTo(Empleado::class, 'empleado_id', 'id_empleado');
     }
-
+    
     public function conceptoSalarial()
     {
         return $this->belongsTo(ConceptoSalarial::class, 'concepto_id', 'id_concepto');
     }
+    
     public function cabecera()
     {
         // liquidacion_id es FK en detalle_liquidacion

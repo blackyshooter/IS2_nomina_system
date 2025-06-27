@@ -145,5 +145,12 @@ class Empleado extends Model
         return $this->hasOne(User::class, 'id_empleado', 'id_empleado');
     }
 
-
+    // Relación con el cargo actual del empleado
+    public function cargoActual()
+    {
+        return $this->hasOne(HistorialCargo::class, 'empleado_id', 'id_empleado')
+                    ->whereNull('fecha_fin')
+                    ->latest('fecha_inicio');
+    }
+    
 }
