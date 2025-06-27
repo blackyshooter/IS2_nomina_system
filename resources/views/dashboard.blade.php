@@ -111,6 +111,15 @@
                                     class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded">📄 Datos Personales</a>
                             </div>
                         </div>
+                        <!-- Nuevo botón agregado debajo -->
+                        
+                        <div x-data="{ open: false }" class="relative">
+                            <a href="{{ route('conceptos-salariales.create') }}"
+                               class="block w-full bg-cyan-500 text-white text-center py-6 rounded-lg shadow-md hover:bg-pink-700 transition duration-300">
+                                <i class="fas fa-coins text-3xl mb-2"></i>
+                                <span class="block text-lg font-semibold">Conceptos Salariales</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

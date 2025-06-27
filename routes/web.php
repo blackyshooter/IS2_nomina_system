@@ -12,6 +12,8 @@ use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\EmbargoJudicialController;
 use App\Http\Controllers\RetencionSindicalController;
 use App\Http\Controllers\ReporteEmpleadoController;
+use App\Http\Controllers\ConceptoSalarialController;
+
 //use App\Http\Controllers\NominaController;
 
 
@@ -83,6 +85,10 @@ Route::prefix('reporte')->group(function () {
     Route::get('/datos-personales', [ReporteEmpleadoController::class, 'datosPersonales'])->name('reporte.datos_personales');
 });
 
+//Ruta conceptos salariales
+Route::resource('conceptos-salariales', ConceptoSalarialController::class)->only([
+    'create', 'store'
+]);
 
 // Ruta adicional para redirigir a dashboard si se accede directamente a /liquidaciones
 Route::get('/liquidaciones', function () {
