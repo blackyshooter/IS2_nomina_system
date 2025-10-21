@@ -16,12 +16,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('nombre_usuario', 50);
-            $table->unsignedBigInteger('id_empleado');
-        
+            $table->unsignedBigInteger('id_empleado')->nullable(); // Permitir valores NULL
             $table->foreign('id_empleado')->references('id_empleado')->on('empleados')->onDelete('cascade');       
             $table->timestamps();
         });
-        
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
